@@ -1,0 +1,21 @@
+{
+  "name": "kalev-apiv2",
+  "version": "1.0.0",
+  "description": "Basado en la estructura de la base de datos proporcionada, la aplicación parece ser una plataforma educativa que involucra alumnos, docentes, actividades, juegos y métricas. Aquí te dejo una lista de posibles endpoints para la API que podría interactuar con esta base de datos, considerando tanto la aplicación móvil (para alumnos) como el dashboard (para administración o docentes).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tinnlaroli/KALEV-apiv2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/tinnlaroli/KALEV-apiv2/issues"
+  },
+  "homepage": "https://github.com/tinnlaroli/KALEV-apiv2#readme"
+}
