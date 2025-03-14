@@ -50,3 +50,4 @@ router.get('/', juegoController.getJuegos);
 router.get('/:id', juegoController.getJuegoById);
 
 module.exports = router;
+
