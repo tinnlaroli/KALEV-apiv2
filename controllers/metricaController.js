@@ -34,3 +34,4 @@ exports.registrarMetrica = async (req, res) => {
                 res.status(500).json({ message: "Error al obtener las métricas", error });
             }
         };
+        
