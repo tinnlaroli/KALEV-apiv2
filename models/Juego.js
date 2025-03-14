@@ -27,3 +27,4 @@ const juegoSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Juego', juegoSchema);
+
