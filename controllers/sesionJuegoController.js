@@ -37,3 +37,4 @@ exports.getSesionesJuegoByJugador = async (req, res) => {
         res.status(500).json({ message: "Error al obtener las sesiones de juego", error });
     }
 };
+
