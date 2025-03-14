@@ -1,4 +1,4 @@
-const Juego = require('../models/juego');
+const Juego = require('../models/Juego');
 
 // Obtener todos los juegos disponibles
 exports.getJuegos = async (req, res) => {
