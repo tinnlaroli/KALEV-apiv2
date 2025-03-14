@@ -34,3 +34,4 @@ const metricaSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Metrica', metricaSchema);
+
