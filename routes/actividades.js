@@ -1,5 +1,5 @@
 const express = require('express');
-const { obtenerActividades, obtenerActividadPorId, crearActividadController } = require('../controllers/actividadesController');
+const { obtenerActividades, obtenerActividadPorId, crearActividadController, obtenerActividadesPorEstudiante } = require('../controllers/actividadesController');
 const router = express.Router();
 
 /**
@@ -78,5 +78,28 @@ router.get('/:id', obtenerActividadPorId);
  *         description: Error en el servidor.
  */
 router.post('/', crearActividadController);
+
+/**
+ * @swagger
+ * /actividades/estudiante/{id_estudiante}:
+ *   get:
+ *     summary: Obtener todas las actividades asignadas a un estudiante
+ *     description: Devuelve todas las actividades asignadas a un estudiante en particular, basado en su ID.
+ *     parameters:
+ *       - in: path
+ *         name: id_estudiante
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del estudiante para obtener sus actividades.
+ *     responses:
+ *       200:
+ *         description: Lista de actividades obtenida correctamente.
+ *       404:
+ *         description: No se encontraron actividades para este estudiante.
+ *       500:
+ *         description: Error en el servidor.
+ */
+router.get('/estudiante/:id_estudiante', obtenerActividadesPorEstudiante);
 
 module.exports = router;

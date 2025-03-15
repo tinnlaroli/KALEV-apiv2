@@ -20,5 +20,16 @@ const crearActividad = async (nombre, descripcion, fecha_inicio, fecha_fin, id_g
     return result.rows[0]; // Retorna la actividad recién creada.
 };
 
-module.exports = { getActividades, getActividadById, crearActividad };
+const getActividadPorEstudiante = async (id_estudiante) => {
+    const result = await pool.query(
+        `SELECT a.*
+         FROM actividades a
+         JOIN alumno_actividad aa ON a.id_actividad = aa.id_actividad
+         JOIN estudiantes e ON aa.id_estudiante = e.id_estudiante
+         WHERE e.id_estudiante = $1`,
+         [id_estudiante]
+    );
+    return result.rows;
+}
+module.exports = { getActividades, getActividadById, crearActividad, getActividadPorEstudiante };
 
