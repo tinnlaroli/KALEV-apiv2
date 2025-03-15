@@ -1,9 +1,5 @@
-const { Pool } = require('pg');
-require('dotenv').config();
 
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL || 'postgresql://postgres:KphDacHAkGewSheRBsMdMjAAqHyIVpku@yamabiko.proxy.rlwy.net:14179/railway',
-});
+const pool = require('../config/db');
 
 const getActividades = async () => {
     const result = await pool.query('SELECT * FROM actividades');
@@ -15,5 +11,14 @@ const getActividadById = async (id) => {
     return result.rows[0]; // Retorna solo un objeto en lugar de un array
 };
 
-module.exports = { getActividades, getActividadById };
+const crearActividad = async (nombre, descripcion, fecha_inicio, fecha_fin, id_grupo) => {
+    const result = await pool.query(
+        `INSERT INTO actividades (nombre_actividad, descripcion, fecha_inicio, fecha_fin, id_grupo) 
+         VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+        [nombre, descripcion, fecha_inicio, fecha_fin, id_grupo]
+    );
+    return result.rows[0]; // Retorna la actividad recién creada.
+};
+
+module.exports = { getActividades, getActividadById, crearActividad };
 

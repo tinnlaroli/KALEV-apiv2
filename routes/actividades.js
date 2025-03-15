@@ -1,5 +1,5 @@
 const express = require('express');
-const { obtenerActividades, obtenerActividadPorId } = require('../controllers/actividadesController');
+const { obtenerActividades, obtenerActividadPorId, crearActividadController } = require('../controllers/actividadesController');
 const router = express.Router();
 
 /**
@@ -38,5 +38,45 @@ router.get('/', obtenerActividades);
  *         description: Error en el servidor.
  */
 router.get('/:id', obtenerActividadPorId);
+
+/**
+ * @swagger
+ * /actividades:
+ *   post:
+ *     summary: Crear una nueva actividad
+ *     description: Agrega una nueva actividad a la base de datos.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: "Revisión de código"
+ *               descripcion:
+ *                 type: string
+ *                 example: "Evaluar la calidad del código en el sprint actual"
+ *               fecha_inicio:
+ *                 type: string
+ *                 format: date
+ *                 example: "2025-03-20"
+ *               fecha_fin:
+ *                 type: string
+ *                 format: date
+ *                 example: "2025-03-25"
+ *               id_grupo:
+ *                 type: integer
+ *                 example: 2
+ *     responses:
+ *       201:
+ *         description: Actividad creada exitosamente.
+ *       400:
+ *         description: Datos inválidos o incompletos.
+ *       500:
+ *         description: Error en el servidor.
+ */
+router.post('/', crearActividadController);
 
 module.exports = router;
