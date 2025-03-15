@@ -10,4 +10,10 @@ const getActividades = async () => {
     return result.rows;
 };
 
-module.exports = { getActividades };
+const getActividadById = async (id) => {
+    const result = await pool.query('SELECT * FROM actividades WHERE id_actividad = $1', [id]);
+    return result.rows[0]; // Retorna solo un objeto en lugar de un array
+};
+
+module.exports = { getActividades, getActividadById };
+
