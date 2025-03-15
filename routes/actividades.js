@@ -1,5 +1,5 @@
 const express = require('express');
-const { obtenerActividades, obtenerActividadPorId, crearActividadController, obtenerActividadesPorEstudiante } = require('../controllers/actividadesController');
+const { obtenerActividades, obtenerActividadPorId, crearActividadController, obtenerActividadesPorEstudiante, asignarActividad } = require('../controllers/actividadesController');
 const router = express.Router();
 
 /**
@@ -101,5 +101,43 @@ router.post('/', crearActividadController);
  *         description: Error en el servidor.
  */
 router.get('/estudiante/:id_estudiante', obtenerActividadesPorEstudiante);
+
+/**
+ * @swagger
+ * /alumno_actividad:
+ *   post:
+ *     summary: Asignar una actividad a un estudiante
+ *     description: Asigna una actividad específica a un estudiante y guarda la información relacionada.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_estudiante:
+ *                 type: integer
+ *                 description: ID del estudiante al que se le asignará la actividad.
+ *               id_actividad:
+ *                 type: integer
+ *                 description: ID de la actividad que se asignará.
+ *               id_materia:
+ *                 type: integer
+ *                 description: ID de la materia relacionada con la actividad.
+ *               estado:
+ *                 type: string
+ *                 description: Estado de la actividad (por ejemplo, "en progreso", "completada").
+ *               calificacion:
+ *                 type: float
+ *                 description: Calificación obtenida por el estudiante en la actividad.
+ *     responses:
+ *       201:
+ *         description: Actividad asignada correctamente al estudiante.
+ *       400:
+ *         description: Faltan datos necesarios en el cuerpo de la solicitud.
+ *       500:
+ *         description: Error en el servidor.
+ */
+router.post('/', asignarActividad )
 
 module.exports = router;

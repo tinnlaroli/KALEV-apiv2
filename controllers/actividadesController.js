@@ -1,4 +1,4 @@
-const { getActividades, getActividadById, crearActividad, getActividadesPorEstudiante } = require('../models/actividad');
+const { getActividades, getActividadById, crearActividad, getActividadPorEstudiante, asignarActividadAEstudiante } = require('../models/actividad');
 
 const obtenerActividades = async (req, res) => {
     try {
@@ -43,7 +43,7 @@ const crearActividadController = async (req, res) => {
 const obtenerActividadesPorEstudiante = async (req, res) => {
     try {
         const { id_estudiante } = req.params;
-        const actividades = await getActividadesPorEstudiante(id_estudiante);
+        const actividades = await getActividadPorEstudiante(id_estudiante);
 
         if (actividades.length === 0) {
             return res.status(404).json({ error: 'No se encontraron actividades para este estudiante' });
@@ -55,4 +55,21 @@ const obtenerActividadesPorEstudiante = async (req, res) => {
     }
 };
 
-module.exports = { obtenerActividades, obtenerActividadPorId, crearActividadController, obtenerActividadesPorEstudiante };
+const asignarActividad = async (req, res) => {
+    try {
+        const { id_estudiante, id_actividad, id_materia, estado, calificacion } = req.body;
+
+        // Verificar que todos los campos necesarios están presentes
+        if (!id_estudiante || !id_actividad || !id_materia || estado === undefined || calificacion === undefined) {
+            return res.status(400).json({ error: 'Faltan datos necesarios para asignar la actividad' });
+        }
+
+        const actividadAsignada = await asignarActividadAEstudiante(id_estudiante, id_actividad, id_materia, estado, calificacion);
+
+        res.status(201).json(actividadAsignada); // Retorna la actividad asignada
+    } catch (error) {
+        res.status(500).json({ error: 'Error al asignar la actividad al estudiante' });
+    }
+};
+
+module.exports = { obtenerActividades, obtenerActividadPorId, crearActividadController, obtenerActividadesPorEstudiante, asignarActividad };

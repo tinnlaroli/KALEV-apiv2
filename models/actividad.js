@@ -30,6 +30,16 @@ const getActividadPorEstudiante = async (id_estudiante) => {
          [id_estudiante]
     );
     return result.rows;
-}
-module.exports = { getActividades, getActividadById, crearActividad, getActividadPorEstudiante };
+};
+
+const asignarActividadAEstudiante = async (id_estudiante, id_actividad, id_materia, estado, calificacion) => {
+    const result = await pool.query(
+        `INSERT INTO alumno_actividad (id_estudiante, id_actividad, id_materia, estado, calificacion)
+         VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+         [id_estudiante, id_actividad, id_materia, estado, calificacion]
+    );
+    return result.rows[0]; // Retorna la relación recién creada.
+};
+
+module.exports = { getActividades, getActividadById, crearActividad, getActividadPorEstudiante, asignarActividadAEstudiante };
 
