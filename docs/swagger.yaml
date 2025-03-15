@@ -1,0 +1,553 @@
+openapi: 3.0.0
+info:
+  title: API de Usuarios
+  description: API para gestionar usuarios, estudiantes, docentes, tutores y directores
+  version: "1.0.0"
+servers:
+  - url: "http://localhost:3000/api"
+paths:
+  # Métodos POST
+  /user:
+    post:
+      summary: Crear un nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre_usuario:
+                  type: string
+                ap_paterno:
+                  type: string
+                ap_materno:
+                  type: string
+                correo:
+                  type: string
+                contrasenia:
+                  type: string
+                telefono:
+                  type: string
+                id_rol:
+                  type: integer
+      responses:
+        '201':
+          description: Usuario creado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_usuario:
+                    type: integer
+                  nombre_usuario:
+                    type: string
+                  correo:
+                    type: string
+        '400':
+          description: Solicitud incorrecta
+  /student:
+    post:
+      summary: Crear un nuevo estudiante
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                ap_paterno:
+                  type: string
+                ap_materno:
+                  type: string
+                fecha_nacimiento:
+                  type: string
+                  format: date
+                correo:
+                  type: string
+                telefono:
+                  type: string
+                id_grupo:
+                  type: integer
+      responses:
+        '201':
+          description: Estudiante creado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_estudiante:
+                    type: integer
+                  nombre:
+                    type: string
+                  correo:
+                    type: string
+  /teacher:
+    post:
+      summary: Crear un nuevo docente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_usuario:
+                  type: integer
+      responses:
+        '201':
+          description: Docente creado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_docente:
+                    type: integer
+                  id_usuario:
+                    type: integer
+  /tutor:
+    post:
+      summary: Crear un nuevo tutor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_usuario:
+                  type: integer
+      responses:
+        '201':
+          description: Tutor creado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_tutor:
+                    type: integer
+                  id_usuario:
+                    type: integer
+  /director:
+    post:
+      summary: Crear un nuevo director
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_usuario:
+                  type: integer
+                fecha_designacion:
+                  type: string
+                  format: date
+      responses:
+        '201':
+          description: Director creado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_director:
+                    type: integer
+                  id_usuario:
+                    type: integer
+                  fecha_designacion:
+                    type: string
+                    format: date
+  /login:
+    post:
+      summary: Iniciar sesión
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                correo:
+                  type: string
+                contrasenia:
+                  type: string
+      responses:
+        '200':
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      correo:
+                        type: string
+                      rol:
+                        type: integer
+        '400':
+          description: Credenciales incorrectas
+        '500':
+          description: Error del servidor
+
+  # Métodos GET
+  /user/{id}:
+    get:
+      summary: Obtener usuario por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del usuario
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_usuario:
+                    type: integer
+                  nombre_usuario:
+                    type: string
+                  ap_paterno:
+                    type: string
+                  ap_materno:
+                    type: string
+                  correo:
+                    type: string
+                  telefono:
+                    type: string
+                  id_rol:
+                    type: integer
+        '404':
+          description: Usuario no encontrado
+  /student/{id}:
+    get:
+      summary: Obtener estudiante por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del estudiante
+      responses:
+        '200':
+          description: Estudiante encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_estudiante:
+                    type: integer
+                  nombre:
+                    type: string
+                  ap_paterno:
+                    type: string
+                  ap_materno:
+                    type: string
+                  fecha_nacimiento:
+                    type: string
+                    format: date
+                  correo:
+                    type: string
+                  telefono:
+                    type: string
+                  id_grupo:
+                    type: integer
+        '404':
+          description: Estudiante no encontrado
+  /teacher/{id}:
+    get:
+      summary: Obtener docente por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del docente
+      responses:
+        '200':
+          description: Docente encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_docente:
+                    type: integer
+                  id_usuario:
+                    type: integer
+        '404':
+          description: Docente no encontrado
+  /tutor/{id}:
+    get:
+      summary: Obtener tutor por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del tutor
+      responses:
+        '200':
+          description: Tutor encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_tutor:
+                    type: integer
+                  id_usuario:
+                    type: integer
+        '404':
+          description: Tutor no encontrado
+  /director/{id}:
+    get:
+      summary: Obtener director por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del director
+      responses:
+        '200':
+          description: Director encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_director:
+                    type: integer
+                  id_usuario:
+                    type: integer
+                  fecha_designacion:
+                    type: string
+                    format: date
+        '404':
+          description: Director no encontrado
+
+  # Métodos PUT
+  /user/{id}:
+    put:
+      summary: Actualizar un usuario
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre_usuario:
+                  type: string
+                ap_paterno:
+                  type: string
+                ap_materno:
+                  type: string
+                correo:
+                  type: string
+                contrasenia:
+                  type: string
+                telefono:
+                  type: string
+                id_rol:
+                  type: integer
+      responses:
+        '200':
+          description: Usuario actualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_usuario:
+                    type: integer
+                  nombre_usuario:
+                    type: string
+                  correo:
+                    type: string
+        '404':
+          description: Usuario no encontrado
+  /student/{id}:
+    put:
+      summary: Actualizar un estudiante
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del estudiante
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                ap_paterno:
+                  type: string
+                ap_materno:
+                  type: string
+                fecha_nacimiento:
+                  type: string
+                  format: date
+                correo:
+                  type: string
+                telefono:
+                  type: string
+                id_grupo:
+                  type: integer
+      responses:
+        '200':
+          description: Estudiante actualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_estudiante:
+                    type: integer
+                  nombre:
+                    type: string
+                  correo:
+                    type: string
+        '404':
+          description: Estudiante no encontrado
+  /teacher/{id}:
+    put:
+      summary: Actualizar un docente
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del docente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_usuario:
+                  type: integer
+      responses:
+        '200':
+          description: Docente actualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_docente:
+                    type: integer
+                  id_usuario:
+                    type: integer
+        '404':
+          description: Docente no encontrado
+  /tutor/{id}:
+    put:
+      summary: Actualizar un tutor
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del tutor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_usuario:
+                  type: integer
+      responses:
+        '200':
+          description: Tutor actualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_tutor:
+                    type: integer
+                  id_usuario:
+                    type: integer
+        '404':
+          description: Tutor no encontrado
+  /director/{id}:
+    put:
+      summary: Actualizar un director
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del director
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_usuario:
+                  type: integer
+                fecha_designacion:
+                  type: string
+                  format: date
+      responses:
+        '200':
+          description: Director actualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_director:
+                    type: integer
+                  id_usuario:
+                    type: integer
+                  fecha_designacion:
+                    type: string
+                    format: date
+        '404':
+          description: Director no encontrado
