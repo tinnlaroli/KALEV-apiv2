@@ -3,7 +3,6 @@ const { pool } = require("../config/db");
 // Modelo para la gestión de estudiantes
 class EstudianteModel {
   // Obtener todos los estudiantes
-
   /* la consulta funciona asi:
   *: selecciona todos los campos de la tabla estudiantes
   orderBy ap_paterno, nombre: ordena los resultados por ap_paterno y nombre
@@ -34,7 +33,6 @@ class EstudianteModel {
   }
 
   // Obtener estudiantes por grupo
-
   /* la consulta funciona asi:
   *: selecciona todos los campos de la tabla estudiantes
   where id_grupo = $1: selecciona los estudiantes que pertenezcan al grupo que se le pase como parametro
@@ -51,7 +49,6 @@ class EstudianteModel {
   }
 
   // Verificar si un grupo existe
-
   /* la consulta funciona asi:
   SELECT * FROM grupos: selecciona todos los campos de la tabla grupos
   WHERE id_grupo = $1: selecciona el grupo con el id que se le pase como parametro
@@ -67,7 +64,6 @@ class EstudianteModel {
   }
   
   // Crear un nuevo estudiante
-
   /* la consulta funciona asi:
   INSERT INTO estudiantes: inserta un nuevo registro en la tabla estudiantes
   (nombre, ap_paterno, ap_materno, fecha_nacimiento, correo, telefono, id_grupo): inserta los valores en la tabla estudiantes
@@ -97,7 +93,6 @@ class EstudianteModel {
   }
 
   // Actualizar un estudiante
-
   /* la consulta funciona asi:
   UPDATE estudiantes: actualiza un registro en la tabla estudiantes
   SET nombre = $1, ap_paterno = $2, ap_materno = $3, fecha_nacimiento = $4, correo = $5, telefono = $6, id_grupo = $7: actualiza los valores en la tabla estudiantes
@@ -131,7 +126,6 @@ class EstudianteModel {
   }
 
   // Eliminar un estudiante
-
   /* la consulta funciona asi:
   DELETE FROM estudiantes: elimina un registro en la tabla estudiantes
   WHERE id_estudiante = $1: elimina el registro con el id que se le pase como parametro
