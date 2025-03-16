@@ -2,19 +2,22 @@ const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const fs = require('fs');
 const path = require('path');
-
 const router = express.Router();
 const GrupoController = require('../controllers/grupoController');
 
 // Cargar Swagger JSON
-const swaggerDocument = JSON.parse(fs.readFileSync(path.join(__dirname, '../swagger/swagger.json'), 'utf8'));
-
-// Ruta de la documentación Swagger
-router.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+try {
+  const swaggerDocument = JSON.parse(fs.readFileSync(path.join(__dirname, '../swagger/swagger.json'), 'utf8'));
+  
+  // Ruta de la documentación Swagger
+  router.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+} catch (error) {
+  console.error('Error al cargar el archivo swagger.json:', error);
+}
 
 // Rutas de Grupos
-router.get('/grupos', GrupoController.obtenerTodos);
-router.get('/grupos/:id', GrupoController.obtenerPorId);
-router.post('/grupos', GrupoController.crear);
+router.get('/', GrupoController.obtenerTodos);
+router.get('/:id', GrupoController.obtenerPorId);
+router.post('/', GrupoController.crear);
 
 module.exports = router;

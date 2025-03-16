@@ -6,7 +6,6 @@ class GrupoController {
   static async obtenerTodos(req, res) {
     try {
       const grupos = await GrupoModel.obtenerTodos();
-      
       return res.status(200).json({
         exito: true,
         data: grupos,
@@ -25,17 +24,14 @@ class GrupoController {
   // GET /grupos/:id - Obtener detalles de un grupo específico
   static async obtenerPorId(req, res) {
     const { id } = req.params;
-    
     try {
       const grupo = await GrupoModel.obtenerPorId(id);
-      
       if (!grupo) {
         return res.status(404).json({
           exito: false,
           mensaje: `No se encontró el grupo con ID ${id}`
         });
       }
-      
       return res.status(200).json({
         exito: true,
         data: grupo,
@@ -90,9 +86,12 @@ class GrupoController {
         grado
       });
       
+      // Obtener el grupo completo con los nombres de docente y director
+      const grupoCompleto = await GrupoModel.obtenerPorId(nuevoGrupo.id_grupo);
+      
       return res.status(201).json({
         exito: true,
-        data: nuevoGrupo,
+        data: grupoCompleto,
         mensaje: 'Grupo creado correctamente'
       });
     } catch (error) {

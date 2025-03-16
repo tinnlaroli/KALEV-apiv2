@@ -5,20 +5,17 @@ class GrupoModel {
   // Obtener todos los grupos
   static async obtenerTodos() {
     try {
-      /* consulta funciona asi
-      el select g.* es para seleccionar todos los campos de la tabla grupos
-      el join docentes d es para unir la tabla docentes con la tabla grupos
-      el ON g.id_docente = d.id_docente es para unir los registros de las tablas docentes y grupos
-      el join director dir es para unir la tabla director con la tabla grupos
-      el ON g.id_director = dir.id_director es para unir los registros de las tablas director y grupos
-      */
       const query = `
         SELECT g.*, 
-              d.nombre as nombre_docente, 
-              dir.nombre as nombre_director
+              u1.nombre_usuario as nombre_docente, 
+              u1.ap_paterno as ap_paterno_docente,
+              u2.nombre_usuario as nombre_director,
+              u2.ap_paterno as ap_paterno_director
         FROM grupos g
         JOIN docentes d ON g.id_docente = d.id_docente
+        JOIN usuarios u1 ON d.id_usuario = u1.id_usuario
         JOIN director dir ON g.id_director = dir.id_director
+        JOIN usuarios u2 ON dir.id_usuario = u2.id_usuario
       `;
       const { rows } = await pool.query(query);
       return rows;
@@ -31,21 +28,17 @@ class GrupoModel {
   // Obtener un grupo por su ID
   static async obtenerPorId(id) {
     try {
-      /*consulta funciona asi
-      el select g.* es para seleccionar todos los campos de la tabla grupos
-      el join docentes d es para unir la tabla docentes con la tabla grupos
-      el ON g.id_docente = d.id_docente es para unir los registros de las tablas docentes y grupos
-      el join director dir es para unir la tabla director con la tabla grupos
-      el ON g.id_director = dir.id_director es para unir los registros de las tablas director y grupos
-      el WHERE g.id_grupo = $1 es para seleccionar el grupo con el id que se pasa como parametro
-      */
       const query = `
         SELECT g.*, 
-              d.nombre as nombre_docente, 
-              dir.nombre as nombre_director
+              u1.nombre_usuario as nombre_docente, 
+              u1.ap_paterno as ap_paterno_docente,
+              u2.nombre_usuario as nombre_director,
+              u2.ap_paterno as ap_paterno_director
         FROM grupos g
         JOIN docentes d ON g.id_docente = d.id_docente
+        JOIN usuarios u1 ON d.id_usuario = u1.id_usuario
         JOIN director dir ON g.id_director = dir.id_director
+        JOIN usuarios u2 ON dir.id_usuario = u2.id_usuario
         WHERE g.id_grupo = $1
       `;
       const { rows } = await pool.query(query, [id]);
@@ -61,12 +54,6 @@ class GrupoModel {
     const { nombre_grupo, id_docente, id_director, grado } = grupoData;
 
     try {
-      /*consulta funciona asi
-      el INSERT INTO grupos es para insertar un nuevo registro en la tabla grupos
-      el nombre_grupo, id_docente, id_director, fecha_creacion, grado son los campos que se van a insertar
-      el VALUES ($1, $2, $3, CURRENT_DATE, $4) son los valores que se van a insert
-      el RETURNING * es para retornar el registro que se acaba de insertar
-      */
       const query = `
         INSERT INTO grupos (nombre_grupo, id_docente, id_director, fecha_creacion, grado) 
         VALUES ($1, $2, $3, CURRENT_DATE, $4) 
@@ -88,10 +75,6 @@ class GrupoModel {
   // Verificar si un docente existe
   static async verificarDocente(id_docente) {
     try {
-      /* consulta funciona asi
-      el SELECT id_docente FROM docentes es para seleccionar el campo id_docente de la tabla docentes
-      el WHERE id_docente = $1 es para seleccionar el docente con el id que se pasa como parametro
-      */
       const { rows } = await pool.query(
         "SELECT id_docente FROM docentes WHERE id_docente = $1",
         [id_docente]
@@ -108,11 +91,7 @@ class GrupoModel {
 
   // Verificar si un director existe
   static async verificarDirector(id_director) {
-    try { 
-      /* consulta funciona asi
-      el SELECT id_director FROM director es para seleccionar el campo id_director de la tabla director
-      el WHERE id_director = $1 es para seleccionar el director con el id que se pasa como parametro
-      */
+    try {
       const { rows } = await pool.query(
         "SELECT id_director FROM director WHERE id_director = $1",
         [id_director]

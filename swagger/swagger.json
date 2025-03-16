@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "API de KALEV",
-    "description": "Documentación de la API para la gestión de grupos y estudiantes",
+    "title": "API de KALEV - Grupos",
+    "description": "Documentación de la API para la gestión de grupos",
     "version": "1.0.0"
   },
   "servers": [
@@ -24,7 +24,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Grupo"
+                    "$ref": "#/components/schemas/GrupoConDetalles"
                   }
                 }
               }
@@ -43,7 +43,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Grupo"
+                "$ref": "#/components/schemas/GrupoCreacion"
               }
             }
           }
@@ -89,7 +89,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Grupo"
+                  "$ref": "#/components/schemas/GrupoConDetalles"
                 }
               }
             }
@@ -133,6 +133,74 @@
             "type": "string",
             "format": "date",
             "example": "2024-03-14"
+          }
+        }
+      },
+      "GrupoCreacion": {
+        "type": "object",
+        "required": ["nombre_grupo", "id_docente", "id_director", "grado"],
+        "properties": {
+          "nombre_grupo": {
+            "type": "string",
+            "example": "Grupo A"
+          },
+          "id_docente": {
+            "type": "integer",
+            "example": 3
+          },
+          "id_director": {
+            "type": "integer",
+            "example": 1
+          },
+          "grado": {
+            "type": "string",
+            "example": "6° Primaria"
+          }
+        }
+      },
+      "GrupoConDetalles": {
+        "type": "object",
+        "properties": {
+          "id_grupo": {
+            "type": "integer",
+            "example": 1
+          },
+          "nombre_grupo": {
+            "type": "string",
+            "example": "Grupo A"
+          },
+          "id_docente": {
+            "type": "integer",
+            "example": 3
+          },
+          "id_director": {
+            "type": "integer",
+            "example": 1
+          },
+          "grado": {
+            "type": "string",
+            "example": "6° Primaria"
+          },
+          "fecha_creacion": {
+            "type": "string",
+            "format": "date",
+            "example": "2024-03-14"
+          },
+          "nombre_docente": {
+            "type": "string",
+            "example": "Juan"
+          },
+          "ap_paterno_docente": {
+            "type": "string",
+            "example": "Pérez"
+          },
+          "nombre_director": {
+            "type": "string",
+            "example": "María"
+          },
+          "ap_paterno_director": {
+            "type": "string",
+            "example": "González"
           }
         }
       }
