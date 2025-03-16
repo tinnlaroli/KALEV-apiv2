@@ -1,0 +1,141 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de KALEV",
+    "description": "Documentación de la API para la gestión de grupos y estudiantes",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Servidor local"
+    }
+  ],
+  "paths": {
+    "/grupos": {
+      "get": {
+        "summary": "Obtener todos los grupos",
+        "description": "Devuelve una lista de todos los grupos disponibles.",
+        "responses": {
+          "200": {
+            "description": "Lista de grupos obtenida correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Grupo"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      },
+      "post": {
+        "summary": "Crear un nuevo grupo",
+        "description": "Permite a los administradores o docentes crear un grupo.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Grupo"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Grupo creado correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Grupo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Solicitud incorrecta"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/grupos/{id}": {
+      "get": {
+        "summary": "Obtener detalles de un grupo específico",
+        "description": "Devuelve la información de un grupo a partir de su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID del grupo a consultar",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Grupo obtenido correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Grupo"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Grupo no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Grupo": {
+        "type": "object",
+        "properties": {
+          "id_grupo": {
+            "type": "integer",
+            "example": 1
+          },
+          "nombre_grupo": {
+            "type": "string",
+            "example": "Grupo A"
+          },
+          "id_docente": {
+            "type": "integer",
+            "example": 3
+          },
+          "id_director": {
+            "type": "integer",
+            "example": 1
+          },
+          "grado": {
+            "type": "string",
+            "example": "6° Primaria"
+          },
+          "fecha_creacion": {
+            "type": "string",
+            "format": "date",
+            "example": "2024-03-14"
+          }
+        }
+      }
+    }
+  }
+}
