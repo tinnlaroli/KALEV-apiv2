@@ -30,7 +30,7 @@ const path = require('path');
 const swaggerUi = require('swagger-ui-express');
 const { testConnection } = require('./config/db');
 const grupoRoutes = require('./routes/grupoRoutes');
-
+const estudianteRoutes = require('./routes/estudianteRoutes');
 // Inicializar la aplicación
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -50,10 +50,11 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Rutas
 app.use('/api/v1/grupos', grupoRoutes);
+app.use('/api/v1/estudiantes', estudianteRoutes);
 
 // Ruta de prueba
 app.get('/', (req, res) => {
-  res.json({ mensaje: 'API de Gestión Educativa' });
+  res.json({ mensaje: 'API de KALEV' });
 });
 
 // Iniciar el servidor

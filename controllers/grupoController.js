@@ -7,15 +7,15 @@ class GrupoController {
     try {
       const grupos = await GrupoModel.obtenerTodos();
       return res.status(200).json({
-        exito: true,
+        success: true,
         data: grupos,
-        mensaje: 'Grupos obtenidos correctamente'
+        message: 'Grupos obtenidos correctamente'
       });
     } catch (error) {
       console.error('Error al obtener grupos:', error);
       return res.status(500).json({
-        exito: false,
-        mensaje: 'Error al obtener los grupos',
+        success: false,
+        message: 'Error al obtener los grupos',
         error: error.message
       });
     }
@@ -28,20 +28,20 @@ class GrupoController {
       const grupo = await GrupoModel.obtenerPorId(id);
       if (!grupo) {
         return res.status(404).json({
-          exito: false,
-          mensaje: `No se encontró el grupo con ID ${id}`
+          success: false,
+          message: `No se encontró el grupo con ID ${id}`
         });
       }
       return res.status(200).json({
-        exito: true,
+        success: true,
         data: grupo,
-        mensaje: 'Grupo obtenido correctamente'
+        message: 'Grupo obtenido correctamente'
       });
     } catch (error) {
       console.error(`Error al obtener el grupo con ID ${id}:`, error);
       return res.status(500).json({
-        exito: false,
-        mensaje: 'Error al obtener el grupo',
+        success: false,
+        message: 'Error al obtener el grupo',
         error: error.message
       });
     }
@@ -54,8 +54,8 @@ class GrupoController {
     // Validar campos requeridos
     if (!nombre_grupo || !id_docente || !id_director || !grado) {
       return res.status(400).json({
-        exito: false,
-        mensaje: 'Todos los campos son obligatorios: nombre_grupo, id_docente, id_director, grado'
+        success: false,
+        message: 'Todos los campos son obligatorios: nombre_grupo, id_docente, id_director, grado'
       });
     }
     
@@ -64,8 +64,8 @@ class GrupoController {
       const docenteExiste = await GrupoModel.verificarDocente(id_docente);
       if (!docenteExiste) {
         return res.status(400).json({
-          exito: false,
-          mensaje: `No existe un docente con ID ${id_docente}`
+          success: false,
+          message: `No existe un docente con ID ${id_docente}`
         });
       }
       
@@ -73,8 +73,8 @@ class GrupoController {
       const directorExiste = await GrupoModel.verificarDirector(id_director);
       if (!directorExiste) {
         return res.status(400).json({
-          exito: false,
-          mensaje: `No existe un director con ID ${id_director}`
+          success: false,
+          message: `No existe un director con ID ${id_director}`
         });
       }
       
@@ -90,15 +90,15 @@ class GrupoController {
       const grupoCompleto = await GrupoModel.obtenerPorId(nuevoGrupo.id_grupo);
       
       return res.status(201).json({
-        exito: true,
+        success: true,
         data: grupoCompleto,
-        mensaje: 'Grupo creado correctamente'
+        message: 'Grupo creado correctamente'
       });
     } catch (error) {
       console.error('Error al crear el grupo:', error);
       return res.status(500).json({
-        exito: false,
-        mensaje: 'Error al crear el grupo',
+        success: false,
+        message: 'Error al crear el grupo',
         error: error.message
       });
     }

@@ -3,6 +3,14 @@ const { pool } = require("../config/db");
 // Modelo para la tabla grupos
 class GrupoModel {
   // Obtener todos los grupos
+
+  /* la consulta funciona asi:
+  g.*: selecciona todos los campos de la tabla grupos
+  u1.nombre_usuario as nombre_docente: selecciona el campo nombre_usuario de la tabla usuarios y lo renombra a nombre_docente
+  u1.ap_paterno as ap_paterno_docente: selecciona el campo ap_paterno de la tabla usuarios y lo renombra a ap_paterno_docente
+  u2.nombre_usuario as nombre_director: selecciona el campo nombre_usuario de la tabla usuarios y lo renombra a nombre_director
+  u2.ap_paterno as ap_paterno_director: selecciona el campo ap_paterno de la tabla usuarios y lo renombra a ap_paterno_director
+   */
   static async obtenerTodos() {
     try {
       const query = `
@@ -26,6 +34,14 @@ class GrupoModel {
   }
 
   // Obtener un grupo por su ID
+
+  /* la consulta funciona asi:
+  g.*: selecciona todos los campos de la tabla grupos
+  u1.nombre_usuario as nombre_docente: selecciona el campo nombre_usuario de la tabla usuarios y lo renombra a nombre_docente
+  u1.ap_paterno as ap_paterno_docente: selecciona el campo ap_paterno de la tabla usuarios y lo renombra a ap_paterno_docente
+  u2.nombre_usuario as nombre_director: selecciona el campo nombre_usuario de la tabla usuarios y lo renombra a nombre_director
+  u2.ap_paterno as ap_paterno_director: selecciona el campo ap_paterno de la tabla usuarios y lo renombra a ap_paterno_direct
+   */
   static async obtenerPorId(id) {
     try {
       const query = `
@@ -50,6 +66,12 @@ class GrupoModel {
   }
 
   // Crear un nuevo grupo
+
+  /* la consulta funciona asi:
+  INSERT INTO grupos (nombre_grupo, id_docente, id_director, fecha_creacion, grado) : inserta los valores en la tabla grupos
+  VALUES ($1, $2, $3, CURRENT_DATE, $4) : los valores que se insertaran en la tabla
+  RETURNING *: retorna todos los campos de la tabla
+   */
   static async crear(grupoData) {
     const { nombre_grupo, id_docente, id_director, grado } = grupoData;
 
@@ -73,6 +95,10 @@ class GrupoModel {
   }
 
   // Verificar si un docente existe
+
+  /* la consulta funciona asi:
+  SELECT id_docente FROM docentes WHERE id_docente = $1 : selecciona el campo id_docente de la tabla docentes donde id_docente sea igual a $1
+   */
   static async verificarDocente(id_docente) {
     try {
       const { rows } = await pool.query(
@@ -90,6 +116,10 @@ class GrupoModel {
   }
 
   // Verificar si un director existe
+
+  /* la consulta funciona asi:
+  SELECT id_director FROM director WHERE id_director = $1 : selecciona el campo id_director de la tabla director donde id_director sea igual a $1
+   */
   static async verificarDirector(id_director) {
     try {
       const { rows } = await pool.query(
