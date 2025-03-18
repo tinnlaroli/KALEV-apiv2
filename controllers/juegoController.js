@@ -1,26 +1,34 @@
-const Juego = require('../models/Juego');
+const { getJuegos, getJuegoById } = require('../models/Juego');
 
 // Obtener todos los juegos disponibles
-exports.getJuegos = async (req, res) => {
-    try {
-        const juegos = await Juego.find();
-        res.json(juegos);
-    } catch (error) {
-        res.status(500).json({ message: "Error al obtener juegos", error });
-    }
+const obtenerJuegos = async (req, res) => {
+  try {
+    const juegos = await getJuegos();
+    res.json(juegos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener los juegos' });
+  }
 };
 
 //Obtener un juego por su ID
-exports.getJuegoById = async (req, res) => {
-    const { id } = req.params;
+const obtenerJuegoPorId = async (req, res) => {
     try {
-        const juego = await Juego.findById(id);
+        const { id_juego } = req.params;
+        const juego = await getJuegoById(id_juego);
+
         if (!juego) {
-            return res.status(404).json({ message: "Juego no encontrado" });
+            return res.status(404).json({ error: 'Juego no encontrado' });
         }
         res.json(juego);
     }catch (error) {
-            res.status(500).json({ message: "Error al obtener el juego", error });
-        }
-    };
-    
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener el juego' });
+    }
+};
+
+
+module.exports = {
+  obtenerJuegos,
+  obtenerJuegoPorId,
+};

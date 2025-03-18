@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const juegoController = require('../controllers/juegoController');
-
+const { obtenerJuegos, obtenerJuegoPorId } = require('../controllers/juegoController');
 /**
  * @swagger
  * /api/juegos:
@@ -20,7 +19,7 @@ const juegoController = require('../controllers/juegoController');
  */
 
 // Obtener todos los juegos disponibles
-router.get('/', juegoController.getJuegos);
+router.get('/', obtenerJuegos);
 
 /**
  * @swagger
@@ -47,7 +46,7 @@ router.get('/', juegoController.getJuegos);
  */
 
 // Obtener un juego por su ID
-router.get('/:id', juegoController.getJuegoById);
+router.get('/:id', obtenerJuegoPorId);
 
 module.exports = router;
 

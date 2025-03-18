@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const metricaController = require('../controllers/metricaController');
-
+const { registrarMetrica , obtenerMetricasPorJugador} = require('../controllers/metricaController');
 /**
  * @swagger
  * /api/juegos/metricas:
@@ -44,7 +43,7 @@ const metricaController = require('../controllers/metricaController');
  */
 
 // Registrar una nueva métrica
-router.post('/', metricaController.registrarMetrica);
+router.post('/', registrarMetrica);
 
 
 /**
@@ -74,6 +73,6 @@ router.post('/', metricaController.registrarMetrica);
  */
 
 // Obtener las métricas de un jugador
-router.get('/:id_jugador', metricaController.getMetricasByJugador);
+router.get('/:id_jugador', obtenerMetricasPorJugador);
 
 module.exports = router;

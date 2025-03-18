@@ -1,30 +1,16 @@
-const mongoose = require('mongoose');
+const pool = require('../config/db');
 
-// Definir el esquema del juego
-const juegoSchema = new mongoose.Schema({
-    nombre_juego: {
-        type: String,
-        required: true,
-    },
-    descripcion: {
-        type: String,
-        required: true,
-    },
-    nivel: {
-        type: Number,
-        required: true,
-    },
-    id_materia: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Materia',
-        required: true,
-    },
-    id_estilo: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'EstiloAprendizaje',
-        required: true,
-    }
-});
+const getJuegos = async () => {
+  const result = await pool.query('SELECT * FROM juego');
+  return result.rows;
+};
 
-module.exports = mongoose.model('Juego', juegoSchema);
+const getJuegoById = async (id_juego) => {
+  const result = await pool.query('SELECT * FROM juego WHERE id_juego = $1', [id_juego]);
+  return result.rows[0];
+};
 
+module.exports = {
+  getJuegos,
+  getJuegoById,
+};

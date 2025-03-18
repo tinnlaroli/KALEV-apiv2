@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const sesionJuegoController = require('../controllers/sesionJuegoController');
-
+const { registrarNuevaSesionJuego, obtenerSesionesPorJugador } = require('../controllers/sesionJuegoController');
 /**
  * @swagger
  * /api/sesiones_juego:
@@ -41,7 +40,7 @@ const sesionJuegoController = require('../controllers/sesionJuegoController');
  */
 
 // Registrar una nueva sesión de juego
-router.post('/', sesionJuegoController.registrarSesionJuego);
+router.post('/', registrarNuevaSesionJuego);
 
 /**
  * @swagger
@@ -70,6 +69,6 @@ router.post('/', sesionJuegoController.registrarSesionJuego);
  */
 
 // Obtener todas las sesiones de juego de un jugador
-router.get('/:id_jugador', sesionJuegoController.getSesionesJuegoByJugador);
+router.get('/:id_jugador', obtenerSesionesPorJugador);
 
 module.exports = router;
