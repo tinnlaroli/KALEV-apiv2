@@ -1,7 +1,7 @@
 const pool = require('../config/db');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken'); // Import jwt
-const SALT_ROUNDS = 10; // Define the value of SALT_ROUNDS
+const jwt = require('jsonwebtoken');
+const SALT_ROUNDS = 10;
 
 class User {
     // Create User
