@@ -69,6 +69,6 @@ router.post('/', registrarNuevaSesionJuego);
  */
 
 // Obtener todas las sesiones de juego de un jugador
-router.get('/:id_jugadorc', obtenerSesionesPorJugador);
+router.get('/:id_jugador', obtenerSesionesPorJugador);
 
 module.exports = router;
