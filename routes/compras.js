@@ -16,5 +16,6 @@ const comprasController = require('../controllers/comprasController');
  */
 router.get('/', comprasController.obtenerCompras);
 
+router.get('/:id', comprasController.obtenerCompraPorId);
 module.exports = router;
 
