@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/tinnlaroli/KALEV-apiv2/issues"
   },
-  "homepage": "https://github.com/tinnlaroli/KALEV-apiv2#readme"
+  "homepage": "https://github.com/tinnlaroli/KALEV-apiv2#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "pg": "^8.14.1",
+    "swagger-ui-express": "^5.0.1"
+  }
 }

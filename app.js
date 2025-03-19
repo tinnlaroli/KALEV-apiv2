@@ -1,35 +1,23 @@
 const express = require('express');
 const cors = require('cors');
-const swaggerJsdoc = require('swagger-jsdoc');
+const { dotenv } = require('dotenv');
 const swaggerUi = require('swagger-ui-express');
-const app = express();
-const port = 3000;
+const swaggerDocument = require('./swagger/swagger.json');
+const comprasRoutes = require('./routes/compras');
 
-// Middlewares
-app.use(express.json());
+const app = express();
+
+// Habilitar CORS
 app.use(cors());
 
-// Swagger setup
-const swaggerOptions = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "KALEV API",
-      version: "1.0.0",
-      description: "API para gestionar compras y artículos"
-    }
-  },
-  apis: ["./swagger/*.js"]
-};
-const swaggerSpec = swaggerJsdoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// Middleware para Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Rutas
-const comprasRoutes = require('./routes/comprasRoutes');
-const itemsRoutes = require('./routes/itemsRoutes');
 app.use('/compras', comprasRoutes);
-app.use('/items', itemsRoutes);
 
-app.listen(port, () => {
-  console.log(`Servidor corriendo en http://localhost:${port}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`Documentación disponible en http://localhost:${PORT}/api-docs`);
 });

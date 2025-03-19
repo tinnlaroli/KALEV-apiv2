@@ -1,0 +1,47 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "KALEV API",
+      "version": "2.0",
+      "description": "API para gestionar compras"
+    },
+    "host": "localhost:3000",
+    "schemes": ["http"],
+    "paths": {
+      "/compras": {
+        "get": {
+          "summary": "Obtener todas las compras",
+          "description": "Retorna una lista de todas las compras registradas.",
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "Lista de compras obtenida exitosamente",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Compra"
+                }
+              }
+            },
+            "500": {
+              "description": "Error al obtener compras"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "Compra": {
+        "type": "object",
+        "properties": {
+          "id_compra": { "type": "integer" },
+          "id_usuario": { "type": "integer" },
+          "id_item": { "type": "integer" },
+          "fecha_compra": { "type": "string", "format": "date-time" },
+          "cantidad": { "type": "integer" },
+          "costo_total": { "type": "integer" }
+        }
+      }
+    }
+  }
+  
