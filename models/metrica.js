@@ -1,6 +1,6 @@
 const pool = require('../config/db');
 
-const getMetricasPorJugador = async () => {
+const getMetricasPorJugador = async (id_jugador) => {
   const result = await pool.query(
     `SELECT m.*
          FROM metricas m
