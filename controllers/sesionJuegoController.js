@@ -3,7 +3,7 @@ const SesionJuego = require('../models/sesionJuego');
 // Registrar una nueva sesión de juego
 const registrarNuevaSesionJuego = async (req, res) => {
     try {
-        const sesionJuego = await registrarSesionJuego();
+        const sesionJuego = await registrarSesionJuego(req.body);
         res.json(sesionJuego);
     }catch (error) {
         res.status(500).json({ error: 'Error al registrar la sesión de juego' });
