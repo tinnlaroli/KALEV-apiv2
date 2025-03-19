@@ -1,4 +1,4 @@
-const db = require('../config/db');
+const db = require('../config/db');  // Conexión a la base de datos
 
 const getCompras = async () => {
     const result = await db.query('SELECT * FROM compras;'); // Usar db.query en lugar de pool.query
@@ -17,4 +17,17 @@ const obtenerCompraPorId = async (id) => {
     }
 };
 
-module.exports = { getCompras, obtenerCompraPorId };
+const insertarCompra = async ({ id_usuario, id_item, fecha_compra, cantidad, costo_total }) => {
+    try {
+      const result = await db.query(
+        'INSERT INTO compras (id_usuario, id_item, fecha_compra, cantidad, costo_total) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+        [id_usuario, id_item, fecha_compra, cantidad, costo_total]
+      );
+      return result.rows[0];  // Devolver la compra registrada
+    } catch (error) {
+      console.error('Error al insertar compra:', error);
+      throw new Error('No se pudo registrar la compra');
+    }
+  };
+
+module.exports = { getCompras, obtenerCompraPorId, insertarCompra };

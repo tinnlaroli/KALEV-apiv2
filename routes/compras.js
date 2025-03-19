@@ -15,7 +15,8 @@ const comprasController = require('../controllers/comprasController');
  *         description: Error al obtener compras
  */
 router.get('/', comprasController.obtenerCompras);
-
+module.exports = router;
 router.get('/:id', comprasController.obtenerCompraPorId);
 module.exports = router;
-
+router.post('/', comprasController.registrarCompra);
+module.exports = router;
