@@ -13,9 +13,9 @@ app.use(express.json()); // Habilitar el uso de JSON en las solicitudes
 
 // Rutas
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use('/juegoRoutes', juegoRoutes);
-app.use('/metricaRoutes', metricaRoutes);
-app.use('/sesionJuegoRoutes', sesionJuegoRoutes);
+app.use("/api/juegos", juegoRoutes);
+app.use("/api/metricas", metricaRoutes);
+app.use("/api/sesiones_juego", sesionJuegoRoutes);
 
 
 // Puerto de escucha
