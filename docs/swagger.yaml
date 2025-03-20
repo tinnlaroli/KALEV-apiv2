@@ -1,0 +1,192 @@
+openapi: 3.0.0
+info:
+  title: API de Historial y Estrategias de Enseñanza
+  description: API para gestionar estrategias de enseñanza y el historial de recomendaciones.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+    description: Servidor local
+
+paths:
+  /estrategias_ensenanza:
+    get:
+      summary: Obtener todas las estrategias de enseñanza
+      description: Retorna una lista de todas las estrategias disponibles.
+      responses:
+        '200':
+          description: Lista de estrategias obtenida con éxito
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    descripcion:
+                      type: string
+                      example: "Aprendizaje basado en proyectos"
+                    estilo_asociado:
+                      type: string
+                      example: "Visual"
+                    id_tema:
+                      type: integer
+                      example: 5
+    post:
+      summary: Crear una nueva estrategia de enseñanza
+      description: Agrega una nueva estrategia de enseñanza a la base de datos.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                descripcion:
+                  type: string
+                  example: "Aprendizaje colaborativo"
+                estilo_asociado:
+                  type: string
+                  example: "Auditivo"
+                id_tema:
+                  type: integer
+                  example: 3
+      responses:
+        '201':
+          description: Estrategia creada con éxito
+
+  /estrategias_ensenanza/{id}:
+    get:
+      summary: Obtener una estrategia por ID
+      description: Retorna una estrategia específica basada en su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la estrategia a obtener
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Estrategia encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 2
+                  descripcion:
+                    type: string
+                    example: "Gamificación"
+                  estilo_asociado:
+                    type: string
+                    example: "Kinestésico"
+                  id_tema:
+                    type: integer
+                    example: 7
+        '404':
+          description: Estrategia no encontrada
+
+  /historial_recomendaciones/{id_estudiante}:
+    get:
+      summary: Obtener historial de recomendaciones por estudiante
+      description: Retorna el historial de recomendaciones de estrategias de enseñanza de un estudiante.
+      parameters:
+        - name: id_estudiante
+          in: path
+          required: true
+          description: ID del estudiante
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Historial de recomendaciones obtenido con éxito
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id_estudiante:
+                      type: integer
+                      example: 1
+                    id_tema:
+                      type: integer
+                      example: 4
+                    id_estrategia:
+                      type: integer
+                      example: 2
+                    efectividad:
+                      type: integer
+                      example: 90
+        '404':
+          description: Historial no encontrado
+
+  /historial_recomendaciones:
+    post:
+      summary: Registrar una recomendación en el historial
+      description: Guarda una nueva recomendación de estrategia de enseñanza para un estudiante.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_estudiante:
+                  type: integer
+                  example: 1
+                id_tema:
+                  type: integer
+                  example: 4
+                id_estrategia:
+                  type: integer
+                  example: 2
+                efectividad:
+                  type: integer
+                  example: 85
+      responses:
+        '201':
+          description: Recomendación registrada con éxito
+        '400':
+          description: Datos inválidos
+
+components:
+  schemas:
+    Estrategia:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        descripcion:
+          type: string
+          example: "Aprendizaje basado en problemas"
+        estilo_asociado:
+          type: string
+          example: "Visual"
+        id_tema:
+          type: integer
+          example: 2
+
+    Historial:
+      type: object
+      properties:
+        id_estudiante:
+          type: integer
+          example: 1
+        id_tema:
+          type: integer
+          example: 4
+        id_estrategia:
+          type: integer
+          example: 2
+        efectividad:
+          type: integer
+          example: 90
