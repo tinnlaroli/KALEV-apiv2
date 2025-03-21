@@ -1,9 +1,11 @@
-// routes/items.js
 const express = require('express');
 const router = express.Router();
-const itemController = require('../controllers/itemsController'); // Importamos el controlador
+const itemsController = require('../controllers/itemsController'); // Asegúrate de que esta ruta sea correcta
 
 // Ruta para obtener todos los items
-router.get('/', itemController.obtenerItems);
+router.get('/', itemsController.obtenerItems);
+
+// Ruta para obtener un item por ID
+router.get('/:id', itemsController.obtenerItemPorId);
 
 module.exports = router;
