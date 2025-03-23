@@ -1,201 +1,160 @@
-const User = require('../models/userModel');
+const UserModel = require('../models/userModel');
 
 class UserController {
+  // GET /usuarios/:id - Obtener usuario por ID
+  static async obtenerPorId(req, res) {
+    const { id } = req.params;
+    try {
+      const usuario = await UserModel.obtenerPorId(id);
+      if (!usuario) {
+        return res.status(404).json({
+          success: false,
+          message: `No se encontró el usuario con ID ${id}`
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        data: usuario,
+        message: 'Usuario obtenido correctamente'
+      });
+    } catch (error) {
+      console.error(`Error al obtener usuario con ID ${id}:`, error);
+      return res.status(500).json({
+        success: false,
+        message: 'Error al obtener el usuario',
+        error: error.message
+      });
+    }
+  }
 
-    static async findAllUsers(req, res) {
-        try {
-            const users = await User.findUser();
-            res.json(users);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
+  // GET /usuarios/rol/:rol - Obtener usuarios por rol
+  static async obtenerPorRol(req, res) {
+    const { rol } = req.params;
+    try {
+      const usuarios = await UserModel.obtenerPorRol(rol);
+      return res.status(200).json({
+        success: true,
+        data: usuarios,
+        message: `Usuarios con rol ${rol} obtenidos correctamente`
+      });
+    } catch (error) {
+      console.error(`Error al obtener usuarios por rol ${rol}:`, error);
+      return res.status(500).json({
+        success: false,
+        message: 'Error al obtener los usuarios por rol',
+        error: error.message
+      });
+    }
+  }
+
+  // POST /usuarios/register - Registrar nuevo usuario
+  static async registrar(req, res) {
+    const { nombre, apellidos, correo, telefono, rol, password } = req.body;
+
+    if (!nombre || !apellidos || !correo || !telefono || !rol || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Todos los campos son obligatorios: nombre, apellidos, correo, telefono, rol, password'
+      });
     }
 
-    static async getUserById(req, res) {
-        try {
-            const user = await User.findUserById(req.params.id);
-            if (!user) {
-                return res.status(404).json({ message: 'User not found' });
-            }
-            res.json(user);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
+    try {
+      const nuevoUsuario = await UserModel.registrar({
+        nombre,
+        apellidos,
+        correo,
+        telefono,
+        rol,
+        password
+      });
+
+      return res.status(201).json({
+        success: true,
+        data: nuevoUsuario,
+        message: 'Usuario registrado correctamente'
+      });
+    } catch (error) {
+      console.error('Error al registrar usuario:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Error al registrar el usuario',
+        error: error.message
+      });
+    }
+  }
+
+  // POST /usuarios/login - Login con correo
+  static async login(req, res) {
+    const { correo, password } = req.body;
+
+    if (!correo || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Correo y contraseña son obligatorios'
+      });
     }
 
-    static async getStudentById(req, res) {
-        try {
-            const student = await User.findStudentById(req.params.id);
-            if (!student) {
-                return res.status(404).json({ message: 'Student not found' });
-            }
-            res.json(student);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
+    try {
+      const usuario = await UserModel.login(correo);
+      if (!usuario || usuario.password !== password) {
+        return res.status(401).json({
+          success: false,
+          message: 'Credenciales inválidas'
+        });
+      }
+
+      // Aquí podrías agregar generación de JWT
+      return res.status(200).json({
+        success: true,
+        data: usuario,
+        message: 'Inicio de sesión exitoso'
+      });
+    } catch (error) {
+      console.error('Error en login:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Error en el inicio de sesión',
+        error: error.message
+      });
+    }
+  }
+
+  // PUT /usuarios/:id - Actualizar usuario
+  static async actualizar(req, res) {
+    const { id } = req.params;
+    const data = req.body;
+
+    if (Object.keys(data).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Debe proporcionar al menos un campo para actualizar'
+      });
     }
 
-    static async getTeacherById(req, res) {
-        try {
-            const teacher = await User.findTeacherById(req.params.id);
-            if (!teacher) {
-                return res.status(404).json({ message: 'Teacher not found' });
-            }
-            res.json(teacher);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
+    try {
+      const usuarioExistente = await UserModel.obtenerPorId(id);
+      if (!usuarioExistente) {
+        return res.status(404).json({
+          success: false,
+          message: `No se encontró el usuario con ID ${id}`
+        });
+      }
 
-    static async getTutorById(req, res) {
-        try {
-            const tutor = await User.findTutorById(req.params.id);
-            if (!tutor) {
-                return res.status(404).json({ message: 'Tutor not found' });
-            }
-            res.json(tutor);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
+      const usuarioActualizado = await UserModel.actualizar(id, data);
+      return res.status(200).json({
+        success: true,
+        data: usuarioActualizado,
+        message: 'Usuario actualizado correctamente'
+      });
+    } catch (error) {
+      console.error(`Error al actualizar usuario con ID ${id}:`, error);
+      return res.status(500).json({
+        success: false,
+        message: 'Error al actualizar el usuario',
+        error: error.message
+      });
     }
-
-    static async getDirectorById(req, res) {
-        try {
-            const director = await User.findDirectorById(req.params.id);
-            if (!director) {
-                return res.status(404).json({ message: 'Director not found' });
-            }
-            res.json(director);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-
-    static async createUser(req, res) {
-        try {
-            const user = await User.createUser(req.body);
-            res.status(201).json(user);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-
-    static async createStudent(req, res) {
-        try {
-            const student = await User.createStudent(req.body);
-            res.status(201).json(student);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-
-    static async createTeacher(req, res) {
-        try {
-            const teacher = await User.createTeacher(req.body);
-            res.status(201).json(teacher);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-
-    static async createTutor(req, res) {
-        try {
-            const tutor = await User.createTutor(req.body);
-            res.status(201).json(tutor);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-
-    static async createDirector(req, res) {
-        try {
-            const director = await User.createDirector(req.body);
-            res.status(201).json(director);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-
-    static async updateUser(req, res) {
-        try {
-            const user = await User.updateUser(req.params.id, req.body);
-            if (!user) {
-                return res.status(404).json({ message: 'User not found or already deleted' });
-            }
-            res.json(user);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-
-
-    static async loginUser(req, res) {
-        const { correo, contrasenia } = req.body;
-    
-        if (!correo || !contrasenia) {
-            return res.status(400).json({ message: 'Correo y contraseña son requeridos' });
-        }
-    
-        try {
-            const result = await User.loginUser({ correo, contrasenia });
-            if (result.status === 200) {
-                return res.status(200).json(result);
-            }
-            return res.status(result.status).json({ message: result.message });
-        } catch (error) {
-            console.error('Error en loginUser controller:', error);
-            return res.status(500).json({ message: 'Error del servidor' });
-        }
-    }
-    
-
-    static async updateStudent(req, res) {
-        try {
-            const student = await User.updateStudent(req.params.id, req.body);
-            if (!student) {
-                return res.status(404).json({ message: 'Student not found or already deleted' });
-            }
-            res.json(student);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-
-    static async updateTeacher(req, res) {
-        try {
-            const teacher = await User.updateTeacher(req.params.id, req.body);
-            if (!teacher) {
-                return res.status(404).json({ message: 'Teacher not found or already deleted' });
-            }
-            res.json(teacher);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-
-    static async updateTutor(req, res) {
-        try {
-            const tutor = await User.updateTutor(req.params.id, req.body);
-            if (!tutor) {
-                return res.status(404).json({ message: 'Tutor not found or already deleted' });
-            }
-            res.json(tutor);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-
-    static async updateDirector(req, res) {
-        try {
-            const director = await User.updateDirector(req.params.id, req.body);
-            if (!director) {
-                return res.status(404).json({ message: 'Director not found or already deleted' });
-            }
-            res.json(director);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
+  }
 }
 
 module.exports = UserController;

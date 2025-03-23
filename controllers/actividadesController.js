@@ -1,75 +1,111 @@
-const { getActividades, getActividadById, crearActividad, getActividadPorEstudiante, asignarActividadAEstudiante } = require('../models/actividad');
+const ActividadModel = require("../models/actividadModel");
 
-const obtenerActividades = async (req, res) => {
+class ActividadController {
+  // GET /actividades - Obtener todas las actividades
+  static async obtenerTodas(req, res) {
     try {
-        const actividades = await getActividades();
-        res.json(actividades);
+      const actividades = await ActividadModel.obtenerTodas();
+      return res.status(200).json({
+        success: true,
+        data: actividades,
+        message: "Actividades obtenidas correctamente",
+      });
     } catch (error) {
-        res.status(500).json({ error: 'Error al obtener actividades' });
+      console.error("Error al obtener actividades:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Error al obtener actividades",
+        error: error.message,
+      });
     }
-};
+  }
 
-const obtenerActividadPorId = async (req, res) => {
+  // GET /actividades/:id - Obtener actividad por ID
+  static async obtenerPorId(req, res) {
+    const { id } = req.params;
     try {
-        const { id } = req.params;
-        const actividad = await getActividadById(id);
-
-        if (!actividad) {
-            return res.status(404).json({ error: 'Actividad no encontrada' });
-        }
-
-        res.json(actividad);
+      const actividad = await ActividadModel.obtenerPorId(id);
+      if (!actividad) {
+        return res.status(404).json({
+          success: false,
+          message: `No se encontró la actividad con ID ${id}`,
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        data: actividad,
+        message: "Actividad obtenida correctamente",
+      });
     } catch (error) {
-        res.status(500).json({ error: 'Error al obtener la actividad' });
+      console.error(`Error al obtener la actividad con ID ${id}:`, error);
+      return res.status(500).json({
+        success: false,
+        message: "Error al obtener la actividad",
+        error: error.message,
+      });
     }
-};
+  }
 
-const crearActividadController = async (req, res) => {
+  // POST /actividades - Crear nueva actividad
+  static async crear(req, res) {
+    const { nombre, descripcion, fecha_inicio, fecha_fin, id_grupo } = req.body;
+
+    if (!nombre || !descripcion || !fecha_inicio || !fecha_fin || !id_grupo) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Todos los campos son obligatorios: nombre, descripcion, fecha_inicio, fecha_fin, id_grupo",
+      });
+    }
+
     try {
-        const { nombre, descripcion, fecha_inicio, fecha_fin, id_grupo } = req.body;
+      const nuevaActividad = await ActividadModel.crear({
+        nombre,
+        descripcion,
+        fecha_inicio,
+        fecha_fin,
+        id_grupo,
+      });
 
-        // Validación básica
-        if (!nombre || !descripcion || !fecha_inicio || !fecha_fin || !id_grupo) {
-            return res.status(400).json({ error: 'Todos los campos son obligatorios' });
-        }
-
-        const nuevaActividad = await crearActividad(nombre, descripcion, fecha_inicio, fecha_fin, id_grupo);
-        res.status(201).json(nuevaActividad);
+      return res.status(201).json({
+        success: true,
+        data: nuevaActividad,
+        message: "Actividad creada correctamente",
+      });
     } catch (error) {
-        res.status(500).json({ error: 'Error al crear la actividad' });
+      console.error("Error al crear la actividad:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Error al crear la actividad",
+        error: error.message,
+      });
     }
-};
+  }
 
-const obtenerActividadesPorEstudiante = async (req, res) => {
+  // GET /actividades/estudiante/:id_estudiante - Obtener actividades por estudiante
+  static async obtenerPorEstudiante(req, res) {
+    const { id_estudiante } = req.params;
     try {
-        const { id_estudiante } = req.params;
-        const actividades = await getActividadPorEstudiante(id_estudiante);
-
-        if (actividades.length === 0) {
-            return res.status(404).json({ error: 'No se encontraron actividades para este estudiante' });
-        }
-
-        res.json(actividades);
+      const actividades = await ActividadModel.obtenerPorEstudiante(
+        id_estudiante
+      );
+      return res.status(200).json({
+        success: true,
+        data: actividades,
+        message: "Actividades del estudiante obtenidas correctamente",
+      });
     } catch (error) {
-        res.status(500).json({ error: 'Error al obtener las actividades del estudiante' });
+      console.error(
+        `Error al obtener actividades del estudiante ${id_estudiante}:`,
+        error
+      );
+      return res.status(500).json({
+        success: false,
+        message: "Error al obtener actividades del estudiante",
+        error: error.message,
+      });
     }
-};
+  }
+}
 
-const asignarActividad = async (req, res) => {
-    try {
-        const { id_estudiante, id_actividad, id_materia, estado, calificacion } = req.body;
-
-        // Verificar que todos los campos necesarios están presentes
-        if (!id_estudiante || !id_actividad || !id_materia || estado === undefined || calificacion === undefined) {
-            return res.status(400).json({ error: 'Faltan datos necesarios para asignar la actividad' });
-        }
-
-        const actividadAsignada = await asignarActividadAEstudiante(id_estudiante, id_actividad, id_materia, estado, calificacion);
-
-        res.status(201).json(actividadAsignada); // Retorna la actividad asignada
-    } catch (error) {
-        res.status(500).json({ error: 'Error al asignar la actividad al estudiante' });
-    }
-};
-
-module.exports = { obtenerActividades, obtenerActividadPorId, crearActividadController, obtenerActividadesPorEstudiante, asignarActividad };
+module.exports = ActividadController;

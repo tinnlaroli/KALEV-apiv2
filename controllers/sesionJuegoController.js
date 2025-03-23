@@ -1,33 +1,61 @@
-const SesionJuego = require('../models/sesionJuego');
+const SesionJuegoModel = require('../models/sesionJuegoModel');
 
-// Registrar una nueva sesión de juego
-const registrarNuevaSesionJuego = async (req, res) => {
+class SesionJuegoController {
+  // GET /sesiones_juego/:id_jugador - Obtener sesiones por jugador
+  static async obtenerPorJugador(req, res) {
+    const { id_jugador } = req.params;
     try {
-        const sesionJuego = await registrarSesionJuego(req.body);
-        res.json(sesionJuego);
-    }catch (error) {
-        res.status(500).json({ error: 'Error al registrar la sesión de juego' });
+      const sesiones = await SesionJuegoModel.obtenerPorJugador(id_jugador);
+      return res.status(200).json({
+        success: true,
+        data: sesiones,
+        message: `Sesiones de juego del jugador ${id_jugador} obtenidas correctamente`
+      });
+    } catch (error) {
+      console.error(`Error al obtener sesiones de juego del jugador ${id_jugador}:`, error);
+      return res.status(500).json({
+        success: false,
+        message: 'Error al obtener sesiones de juego',
+        error: error.message
+      });
     }
-};
+  }
 
-// Obtener todas las sesiones de juego de un jugador
-const obtenerSesionesPorJugador = async (req, res) => {
+  // POST /sesiones_juego - Registrar nueva sesión de juego
+  static async crear(req, res) {
+    const { id_jugador, id_juego, fecha, duracion, intentos, monedas_ganadas } = req.body;
+
+    if (!id_jugador || !id_juego || !fecha || duracion === undefined || intentos === undefined || monedas_ganadas === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: 'Todos los campos son obligatorios: id_jugador, id_juego, fecha, duracion, intentos, monedas_ganadas'
+      });
+    }
+
     try {
-        const { id_jugador } = req.params;
-        const sesionJuego = await getSesionesPorJugador(id_jugador);
-        
-        if(!sesionJuego){
-            return res.status(404).json({ error: 'Sesiones de juego no encontradas' });
-        }
-        res.json(sesionJuego);
-    }catch (error) {
-        res.status(500).json({ error: 'Error al obtener las sesiones de juego' });
+      const nuevaSesion = await SesionJuegoModel.crear({
+        id_jugador,
+        id_juego,
+        fecha,
+        duracion,
+        intentos,
+        monedas_ganadas
+      });
+
+      return res.status(201).json({
+        success: true,
+        data: nuevaSesion,
+        message: 'Sesión de juego registrada correctamente'
+      });
+    } catch (error) {
+      console.error('Error al registrar sesión de juego:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Error al registrar la sesión de juego',
+        error: error.message
+      });
     }
+  }
+}
 
-};
-
-module.exports = {
-    registrarNuevaSesionJuego,
-    obtenerSesionesPorJugador,
-};
-
+module.exports = SesionJuegoController;

@@ -1,27 +1,61 @@
-const { getMetricasPorJugador, registrarMetricas } = require('../models/metrica');
+const MetricaModel = require('../models/metricaModel');
 
-//Registrar las métricas de un jugador en un juego
-const registrarMetrica = async (req, res) => {
+class MetricaController {
+  // GET /metricas/:id_jugador - Obtener métricas por jugador
+  static async obtenerPorJugador(req, res) {
+    const { id_jugador } = req.params;
     try {
-       const metrica = await registrarMetricas(req.body);
-       res.json(metrica);
+      const metricas = await MetricaModel.obtenerPorJugador(id_jugador);
+      return res.status(200).json({
+        success: true,
+        data: metricas,
+        message: `Métricas del jugador ${id_jugador} obtenidas correctamente`
+      });
     } catch (error) {
-        res.status(500).json({ error: 'Error al registrar la métrica' });
+      console.error(`Error al obtener métricas del jugador ${id_jugador}:`, error);
+      return res.status(500).json({
+        success: false,
+        message: 'Error al obtener las métricas',
+        error: error.message
+      });
     }
-};
+  }
 
-//Obtener las métricas de un jugador en un juego
-const obtenerMetricasPorJugador = async (req, res) => {
+  // POST /juegos/metricas - Registrar nueva métrica
+  static async crear(req, res) {
+    const { id_juego, id_jugador, puntuacion, tiempo, intentos, progreso } = req.body;
+
+    if (!id_juego || !id_jugador || puntuacion === undefined || tiempo === undefined || intentos === undefined || progreso === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: 'Todos los campos son obligatorios: id_juego, id_jugador, puntuacion, tiempo, intentos, progreso'
+      });
+    }
+
     try {
-        const { id_jugador } = req.params;
-        const metricas = await getMetricasPorJugador(id_jugador);
-        res.json(metricas);
-    } catch (error) {
-        res.status(500).json({ error: 'Error al obtener las métricas' });
-    }
-};
+      const nuevaMetrica = await MetricaModel.crear({
+        id_juego,
+        id_jugador,
+        puntuacion,
+        tiempo,
+        intentos,
+        progreso
+      });
 
-module.exports =  {
-    registrarMetrica,
-    obtenerMetricasPorJugador,
-};
+      return res.status(201).json({
+        success: true,
+        data: nuevaMetrica,
+        message: 'Métrica registrada correctamente'
+      });
+    } catch (error) {
+      console.error('Error al registrar métrica:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Error al registrar la métrica',
+        error: error.message
+      });
+    }
+  }
+}
+
+module.exports = MetricaController;

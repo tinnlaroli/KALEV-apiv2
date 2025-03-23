@@ -1,57 +1,83 @@
-const Estrategia = require('../models/estrategiaModel');
+const EstrategiaModel = require("../models/estrategiaModel");
 
 class EstrategiaController {
-    static async obtenerEstrategias(req, res) {
-        try {
-            const estrategias = await Estrategia.getEstrategias();
-            res.json(estrategias);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
+  // GET /estrategias_ensenanza - Obtener todas las estrategias
+  static async obtenerTodas(req, res) {
+    try {
+      const estrategias = await EstrategiaModel.obtenerTodas();
+      return res.status(200).json({
+        success: true,
+        data: estrategias,
+        message: "Estrategias obtenidas correctamente",
+      });
+    } catch (error) {
+      console.error("Error al obtener estrategias:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Error al obtener las estrategias",
+        error: error.message,
+      });
+    }
+  }
+
+  // GET /estrategias_ensenanza/:id - Obtener estrategia por ID
+  static async obtenerPorId(req, res) {
+    const { id } = req.params;
+    try {
+      const estrategia = await EstrategiaModel.obtenerPorId(id);
+      if (!estrategia) {
+        return res.status(404).json({
+          success: false,
+          message: `No se encontró la estrategia con ID ${id}`,
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        data: estrategia,
+        message: "Estrategia obtenida correctamente",
+      });
+    } catch (error) {
+      console.error(`Error al obtener estrategia con ID ${id}:`, error);
+      return res.status(500).json({
+        success: false,
+        message: "Error al obtener la estrategia",
+        error: error.message,
+      });
+    }
+  }
+
+  // POST /estrategias_ensenanza - Crear nueva estrategia
+  static async crear(req, res) {
+    const { descripcion, estilo, tema } = req.body;
+
+    if (!descripcion || !estilo || !tema) {
+      return res.status(400).json({
+        success: false,
+        message: "Todos los campos son obligatorios: descripcion, estilo, tema",
+      });
     }
 
-    static async obtenerEstrategiaPorId(req, res) {
-        try {
-            const estrategia = await Estrategia.getEstrategiaById(req.params.id);
-            if (!estrategia) {
-                return res.status(404).json({ message: 'Estrategia no encontrada' });
-            }
-            res.json(estrategia);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
+    try {
+      const nuevaEstrategia = await EstrategiaModel.crear({
+        descripcion,
+        estilo,
+        tema,
+      });
 
-    static async crearEstrategia(req, res) {
-        try {
-            const { descripcion, estilo_asociado, id_tema } = req.body;
-            const nuevaEstrategia = await Estrategia.create({ descripcion, estilo_asociado, id_tema });
-            res.status(201).json(nuevaEstrategia);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
+      return res.status(201).json({
+        success: true,
+        data: nuevaEstrategia,
+        message: "Estrategia creada correctamente",
+      });
+    } catch (error) {
+      console.error("Error al crear la estrategia:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Error al crear la estrategia",
+        error: error.message,
+      });
     }
+  }
 }
 
-class HistorialController {
-    static async obtenerHistorialPorEstudiante(req, res) {
-        try {
-            const historial = await Historial.findByEstudianteId(req.params.id_estudiante);
-            res.json(historial);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-
-    static async registrarRecomendacion(req, res) {
-        try {
-            const { id_estudiante, id_tema, id_estrategia, efectividad } = req.body;
-            const nuevaRecomendacion = await Historial.create({ id_estudiante, id_tema, id_estrategia, efectividad });
-            res.status(201).json(nuevaRecomendacion);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-}
-
-module.exports = { EstrategiaController, HistorialController};
+module.exports = EstrategiaController;
