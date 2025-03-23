@@ -7,10 +7,15 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/api/v1",
-      "description": "Servidor local"
+      "url": "https://kalev-apiv2-production.up.railway.app",
+      "description": "Producción - Railway"
+    },
+    {
+      "url": "http://localhost:3000",
+      "description": "Desarrollo local"
     }
   ],
+
   "paths": {
     "/usuarios/register": {
       "post": {
