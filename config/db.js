@@ -1,27 +1,15 @@
+require('dotenv').config();
 const { Pool } = require('pg');
 
-// Configuración de la conexión a la base de datos
 const pool = new Pool({
-  connectionString: 'postgresql://postgres:KphDacHAkGewSheRBsMdMjAAqHyIVpku@yamabiko.proxy.rlwy.net:14179/railway',
-  ssl: {
-    rejectUnauthorized: false 
-  }
+    connectionString: process.env.DATABASE_URL || 'postgresql://postgres:KphDacHAkGewSheRBsMdMjAAqHyIVpku@yamabiko.proxy.rlwy.net:14179/railway',
+    ssl: {
+        rejectUnauthorized: false, // Solo si Railway requiere SSL
+    }
 });
 
-// Función para verificar la conexión a la base de datos
-const testConnection = async () => {
-  try {
-    const client = await pool.connect();
-    console.log('Conexión a la base de datos establecida correctamente');
-    client.release();
-    return true;
-  } catch (error) {
-    console.error('Error al conectar a la base de datos:', error);
-    return false;
-  }
-};
+pool.on('error', (err) => {
+    console.error('Error en la conexión con la base de datos:', err);
+});
 
-module.exports = {
-  pool,
-  testConnection
-};
+module.exports = pool;

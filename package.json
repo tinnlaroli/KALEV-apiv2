@@ -1,27 +1,34 @@
 {
   "name": "kalev-apiv2",
   "version": "1.0.0",
-  "description": "API KALEV",
-  "keywords": [],
-  "homepage": "https://github.com/tinnlaroli/KALEV-apiv2#readme",
-  "bugs": {
-    "url": "https://github.com/tinnlaroli/KALEV-apiv2/issues"
+  "description": "Basado en la estructura de la base de datos proporcionada, la aplicación parece ser una plataforma educativa que involucra alumnos, docentes, actividades, juegos y métricas. Aquí te dejo una lista de posibles endpoints para la API que podría interactuar con esta base de datos, considerando tanto la aplicación móvil (para alumnos) como el dashboard (para administración o docentes).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tinnlaroli/KALEV-apiv2.git"
   },
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "author": "tinn505",
   "type": "commonjs",
-  "main": "app.js",
-  "scripts": {
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "bugs": {
+    "url": "https://github.com/tinnlaroli/KALEV-apiv2/issues"
   },
+  "homepage": "https://github.com/tinnlaroli/KALEV-apiv2#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.12.1",
     "pg": "^8.14.0",
-    "swagger-ui-express": "^5.0.1"
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.6",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "validator": "^13.12.0"
   }
 }
