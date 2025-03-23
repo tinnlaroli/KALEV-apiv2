@@ -4,46 +4,38 @@ const fs = require("fs");
 const path = require("path");
 const swaggerUi = require("swagger-ui-express");
 const { testConnection } = require("./config/db");
-const grupoRoutes = require("./routes/grupoRoutes");
-const estudianteRoutes = require("./routes/estudianteRoutes");
+const rutas = require("./routes");
 
 // Inicializar la aplicación
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middlewares
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Cargar Swagger JSON
-const swaggerFile = path.join(__dirname, "./swagger/swagger.json"); // Ruta al archivo JSON
-const swaggerData = fs.readFileSync(swaggerFile, "utf8");
-const swaggerDocument = JSON.parse(swaggerData);
-
 // Documentación Swagger
+const swaggerFilePath = path.join(__dirname, "./swagger/swagger.json");
+const swaggerData = fs.readFileSync(swaggerFilePath, "utf8");
+const swaggerDocument = JSON.parse(swaggerData);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Rutas
-app.use("/api/v1/grupos", grupoRoutes);
-app.use("/api/v1/estudiantes", estudianteRoutes);
+// Rutas de la API
+app.use("/api/v1", rutas); // todas las rutas se cargan aquí
 
-// Ruta de prueba
+// Ruta raíz
 app.get("/", (req, res) => {
-  res.json({ mensaje: "API de KALEV" });
+  res.json({ mensaje: "API de KALEV funcionando correctamente" });
 });
 
 // Iniciar el servidor
 const iniciarServidor = async () => {
   try {
-    // Probar la conexión a la base de datos
     await testConnection();
-
-    // Iniciar el servidor
     app.listen(PORT, "0.0.0.0", () => {
-      console.log(`Servidor corriendo en el puerto ${PORT}`);
-      console.log(
-        `Documentación disponible en: http://localhost:${PORT}/api-docs`
-      );
+      console.log(`Servidor corriendo en http://localhost:${PORT}`);
+      console.log(`Swagger: http://localhost:${PORT}/api-docs`);
     });
   } catch (error) {
     console.error("Error al iniciar el servidor:", error);
