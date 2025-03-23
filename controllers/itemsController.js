@@ -48,21 +48,29 @@ class ItemsController {
 
   // POST /items - Crear nuevo ítem
   static async crear(req, res) {
-    const { nombre, descripcion, costo } = req.body;
+    const {
+      id_tipo_decoracion,
+      nombre_item,
+      descripcion,
+      categoria_items,
+      costo_monedas
+    } = req.body;
 
-    if (!nombre || !descripcion || !costo) {
+    if (!id_tipo_decoracion || !nombre_item || !descripcion || !categoria_items || !costo_monedas) {
       return res.status(400).json({
         success: false,
         message:
-          "Todos los campos son obligatorios: nombre, descripcion, costo",
+          "Todos los campos son obligatorios: id_tipo_decoracion, nombre_item, descripcion, categoria_items, costo_monedas",
       });
     }
 
     try {
       const nuevoItem = await ItemModel.crear({
-        nombre,
+        id_tipo_decoracion,
+        nombre_item,
         descripcion,
-        costo,
+        categoria_items,
+        costo_monedas
       });
 
       return res.status(201).json({

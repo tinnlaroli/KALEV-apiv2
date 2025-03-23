@@ -1,4 +1,4 @@
-const pool = require("../config/db");
+const {pool} = require("../config/db");
 
 class HistorialModel {
   // Obtener historial de recomendaciones por estudiante

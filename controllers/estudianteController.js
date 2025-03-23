@@ -1,4 +1,4 @@
-const EstudianteModel = require('../models/estudianteModel');
+const EstudianteModel = require("../models/estudianteModel");
 
 class EstudianteController {
   // GET /estudiantes - Obtener todos los estudiantes
@@ -8,14 +8,14 @@ class EstudianteController {
       return res.status(200).json({
         success: true,
         data: estudiantes,
-        message: 'Estudiantes obtenidos correctamente'
+        message: "Estudiantes obtenidos correctamente",
       });
     } catch (error) {
-      console.error('Error al obtener estudiantes:', error);
+      console.error("Error al obtener estudiantes:", error);
       return res.status(500).json({
         success: false,
-        message: 'Error al obtener los estudiantes',
-        error: error.message
+        message: "Error al obtener los estudiantes",
+        error: error.message,
       });
     }
   }
@@ -28,54 +28,66 @@ class EstudianteController {
       if (!estudiante) {
         return res.status(404).json({
           success: false,
-          message: `No se encontró el estudiante con ID ${id}`
+          message: `No se encontró el estudiante con ID ${id}`,
         });
       }
       return res.status(200).json({
         success: true,
         data: estudiante,
-        message: 'Estudiante obtenido correctamente'
+        message: "Estudiante obtenido correctamente",
       });
     } catch (error) {
       console.error(`Error al obtener el estudiante con ID ${id}:`, error);
       return res.status(500).json({
         success: false,
-        message: 'Error al obtener el estudiante',
-        error: error.message
+        message: "Error al obtener el estudiante",
+        error: error.message,
       });
     }
   }
 
   // POST /estudiantes - Crear nuevo estudiante
   static async crear(req, res) {
-    const { nombre, apellidos, correo, id_grupo } = req.body;
+    const {
+      nombre,
+      ap_paterno,
+      ap_materno = null,
+      fecha_nacimiento,
+      correo,
+      telefono,
+      id_grupo,
+    } = req.body;
 
-    if (!nombre || !apellidos || !correo || !id_grupo) {
+    if (!nombre || !ap_paterno || !fecha_nacimiento || !correo || !telefono || !id_grupo) {
       return res.status(400).json({
         success: false,
-        message: 'Todos los campos son obligatorios: nombre, apellidos, correo, id_grupo'
+        message:
+          "Todos los campos son obligatorios: nombre, ap_paterno, fecha_nacimiento, correo, telefono, id_grupo",
       });
     }
 
     try {
       const nuevoEstudiante = await EstudianteModel.crear({
         nombre,
-        apellidos,
+        ap_paterno,
+        ap_materno,
+        fecha_nacimiento,
         correo,
-        id_grupo
+        telefono,
+        id_grupo,
       });
 
       return res.status(201).json({
         success: true,
         data: nuevoEstudiante,
-        message: 'Estudiante creado correctamente'
+        message: "Estudiante creado correctamente",
       });
     } catch (error) {
-      console.error('Error al crear el estudiante:', error);
+      console.error("Error al crear el estudiante:", error);
       return res.status(500).json({
         success: false,
-        message: 'Error al crear el estudiante',
-        error: error.message
+        message: "Error al crear el estudiante",
+        error: error.message,
       });
     }
   }
@@ -88,14 +100,14 @@ class EstudianteController {
       return res.status(200).json({
         success: true,
         data: estudiantes,
-        message: `Estudiantes del grupo ${id_grupo} obtenidos correctamente`
+        message: `Estudiantes del grupo ${id_grupo} obtenidos correctamente`,
       });
     } catch (error) {
       console.error(`Error al obtener estudiantes del grupo ${id_grupo}:`, error);
       return res.status(500).json({
         success: false,
-        message: 'Error al obtener los estudiantes por grupo',
-        error: error.message
+        message: "Error al obtener los estudiantes por grupo",
+        error: error.message,
       });
     }
   }

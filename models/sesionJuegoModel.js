@@ -1,4 +1,4 @@
-const pool = require("../config/db");
+const {pool} = require("../config/db");
 
 class SesionJuegoModel {
   // Obtener todas las sesiones de juego de un jugador

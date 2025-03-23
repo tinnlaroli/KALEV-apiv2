@@ -48,20 +48,20 @@ class EstrategiaController {
 
   // POST /estrategias_ensenanza - Crear nueva estrategia
   static async crear(req, res) {
-    const { descripcion, estilo, tema } = req.body;
+    const { descripcion, estilo_asociado, id_tema } = req.body;
 
-    if (!descripcion || !estilo || !tema) {
+    if (!descripcion || !estilo_asociado || !id_tema) {
       return res.status(400).json({
         success: false,
-        message: "Todos los campos son obligatorios: descripcion, estilo, tema",
+        message: "Todos los campos son obligatorios: descripcion, estilo_asociado, id_tema",
       });
     }
 
     try {
       const nuevaEstrategia = await EstrategiaModel.crear({
         descripcion,
-        estilo,
-        tema,
+        estilo_asociado,
+        id_tema,
       });
 
       return res.status(201).json({

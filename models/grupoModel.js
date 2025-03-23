@@ -1,4 +1,4 @@
-const pool = require("../config/db");
+const {pool} = require("../config/db");
 
 class GrupoModel {
   // Obtener todos los grupos

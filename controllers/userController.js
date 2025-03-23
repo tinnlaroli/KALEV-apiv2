@@ -1,4 +1,4 @@
-const UserModel = require('../models/userModel');
+const UserModel = require("../models/userModel");
 
 class UserController {
   // GET /usuarios/:id - Obtener usuario por ID
@@ -9,112 +9,121 @@ class UserController {
       if (!usuario) {
         return res.status(404).json({
           success: false,
-          message: `No se encontró el usuario con ID ${id}`
+          message: `No se encontró el usuario con ID ${id}`,
         });
       }
       return res.status(200).json({
         success: true,
         data: usuario,
-        message: 'Usuario obtenido correctamente'
+        message: "Usuario obtenido correctamente",
       });
     } catch (error) {
       console.error(`Error al obtener usuario con ID ${id}:`, error);
       return res.status(500).json({
         success: false,
-        message: 'Error al obtener el usuario',
-        error: error.message
+        message: "Error al obtener el usuario",
+        error: error.message,
       });
     }
   }
 
-  // GET /usuarios/rol/:rol - Obtener usuarios por rol
+  // GET /usuarios/rol/:id_rol - Obtener usuarios por ID de rol
   static async obtenerPorRol(req, res) {
-    const { rol } = req.params;
+    const { id_rol } = req.params;
     try {
-      const usuarios = await UserModel.obtenerPorRol(rol);
+      const usuarios = await UserModel.obtenerPorRol(id_rol);
       return res.status(200).json({
         success: true,
         data: usuarios,
-        message: `Usuarios con rol ${rol} obtenidos correctamente`
+        message: `Usuarios con id_rol ${id_rol} obtenidos correctamente`,
       });
     } catch (error) {
-      console.error(`Error al obtener usuarios por rol ${rol}:`, error);
+      console.error(`Error al obtener usuarios por id_rol ${id_rol}:`, error);
       return res.status(500).json({
         success: false,
-        message: 'Error al obtener los usuarios por rol',
-        error: error.message
+        message: "Error al obtener los usuarios por id_rol",
+        error: error.message,
       });
     }
   }
 
   // POST /usuarios/register - Registrar nuevo usuario
   static async registrar(req, res) {
-    const { nombre, apellidos, correo, telefono, rol, password } = req.body;
+    const {
+      nombre_usuario,
+      ap_paterno,
+      ap_materno,
+      correo,
+      telefono,
+      id_rol,
+      contrasenia,
+    } = req.body;
 
-    if (!nombre || !apellidos || !correo || !telefono || !rol || !password) {
+    if (!nombre_usuario || !ap_paterno || !correo || !telefono || !id_rol || !contrasenia) {
       return res.status(400).json({
         success: false,
-        message: 'Todos los campos son obligatorios: nombre, apellidos, correo, telefono, rol, password'
+        message:
+          "Todos los campos obligatorios: nombre_usuario, ap_paterno, correo, telefono, id_rol, contrasenia",
       });
     }
 
     try {
       const nuevoUsuario = await UserModel.registrar({
-        nombre,
-        apellidos,
+        nombre_usuario,
+        ap_paterno,
+        ap_materno,
         correo,
         telefono,
-        rol,
-        password
+        id_rol,
+        contrasenia,
       });
 
       return res.status(201).json({
         success: true,
         data: nuevoUsuario,
-        message: 'Usuario registrado correctamente'
+        message: "Usuario registrado correctamente",
       });
     } catch (error) {
-      console.error('Error al registrar usuario:', error);
+      console.error("Error al registrar usuario:", error);
       return res.status(500).json({
         success: false,
-        message: 'Error al registrar el usuario',
-        error: error.message
+        message: "Error al registrar el usuario",
+        error: error.message,
       });
     }
   }
 
   // POST /usuarios/login - Login con correo
   static async login(req, res) {
-    const { correo, password } = req.body;
+    const { correo, contrasenia } = req.body;
 
-    if (!correo || !password) {
+    if (!correo || !contrasenia) {
       return res.status(400).json({
         success: false,
-        message: 'Correo y contraseña son obligatorios'
+        message: "Correo y contraseña son obligatorios",
       });
     }
 
     try {
       const usuario = await UserModel.login(correo);
-      if (!usuario || usuario.password !== password) {
+      if (!usuario || usuario.contrasenia !== contrasenia) {
         return res.status(401).json({
           success: false,
-          message: 'Credenciales inválidas'
+          message: "Credenciales inválidas",
         });
       }
 
-      // Aquí podrías agregar generación de JWT
       return res.status(200).json({
         success: true,
         data: usuario,
-        message: 'Inicio de sesión exitoso'
+        message: "Inicio de sesión exitoso",
       });
     } catch (error) {
-      console.error('Error en login:', error);
+      console.error("Error en login:", error);
       return res.status(500).json({
         success: false,
-        message: 'Error en el inicio de sesión',
-        error: error.message
+        message: "Error en el inicio de sesión",
+        error: error.message,
       });
     }
   }
@@ -127,7 +136,7 @@ class UserController {
     if (Object.keys(data).length === 0) {
       return res.status(400).json({
         success: false,
-        message: 'Debe proporcionar al menos un campo para actualizar'
+        message: "Debe proporcionar al menos un campo para actualizar",
       });
     }
 
@@ -136,7 +145,7 @@ class UserController {
       if (!usuarioExistente) {
         return res.status(404).json({
           success: false,
-          message: `No se encontró el usuario con ID ${id}`
+          message: `No se encontró el usuario con ID ${id}`,
         });
       }
 
@@ -144,14 +153,14 @@ class UserController {
       return res.status(200).json({
         success: true,
         data: usuarioActualizado,
-        message: 'Usuario actualizado correctamente'
+        message: "Usuario actualizado correctamente",
       });
     } catch (error) {
       console.error(`Error al actualizar usuario con ID ${id}:`, error);
       return res.status(500).json({
         success: false,
-        message: 'Error al actualizar el usuario',
-        error: error.message
+        message: "Error al actualizar el usuario",
+        error: error.message,
       });
     }
   }

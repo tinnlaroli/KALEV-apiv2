@@ -1,4 +1,4 @@
-const SesionJuegoModel = require('../models/sesionJuegoModel');
+const SesionJuegoModel = require("../models/sesionJuegoModel");
 
 class SesionJuegoController {
   // GET /sesiones_juego/:id_jugador - Obtener sesiones por jugador
@@ -9,26 +9,44 @@ class SesionJuegoController {
       return res.status(200).json({
         success: true,
         data: sesiones,
-        message: `Sesiones de juego del jugador ${id_jugador} obtenidas correctamente`
+        message: `Sesiones de juego del jugador ${id_jugador} obtenidas correctamente`,
       });
     } catch (error) {
-      console.error(`Error al obtener sesiones de juego del jugador ${id_jugador}:`, error);
+      console.error(
+        `Error al obtener sesiones de juego del jugador ${id_jugador}:`,
+        error
+      );
       return res.status(500).json({
         success: false,
-        message: 'Error al obtener sesiones de juego',
-        error: error.message
+        message: "Error al obtener sesiones de juego",
+        error: error.message,
       });
     }
   }
 
   // POST /sesiones_juego - Registrar nueva sesión de juego
   static async crear(req, res) {
-    const { id_jugador, id_juego, fecha, duracion, intentos, monedas_ganadas } = req.body;
+    const {
+      id_jugador,
+      id_juego,
+      fecha,
+      duracion_juego,
+      intentos,
+      monedas_ganadas,
+    } = req.body;
 
-    if (!id_jugador || !id_juego || !fecha || duracion === undefined || intentos === undefined || monedas_ganadas === undefined) {
+    if (
+      !id_jugador ||
+      !id_juego ||
+      !fecha ||
+      duracion_juego === undefined ||
+      intentos === undefined ||
+      monedas_ganadas === undefined
+    ) {
       return res.status(400).json({
         success: false,
-        message: 'Todos los campos son obligatorios: id_jugador, id_juego, fecha, duracion, intentos, monedas_ganadas'
+        message:
+          "Todos los campos son obligatorios: id_jugador, id_juego, fecha, duracion_juego, intentos, monedas_ganadas",
       });
     }
 
@@ -37,22 +55,22 @@ class SesionJuegoController {
         id_jugador,
         id_juego,
         fecha,
-        duracion,
+        duracion_juego,
         intentos,
-        monedas_ganadas
+        monedas_ganadas,
       });
 
       return res.status(201).json({
         success: true,
         data: nuevaSesion,
-        message: 'Sesión de juego registrada correctamente'
+        message: "Sesión de juego registrada correctamente",
       });
     } catch (error) {
-      console.error('Error al registrar sesión de juego:', error);
+      console.error("Error al registrar sesión de juego:", error);
       return res.status(500).json({
         success: false,
-        message: 'Error al registrar la sesión de juego',
-        error: error.message
+        message: "Error al registrar la sesión de juego",
+        error: error.message,
       });
     }
   }

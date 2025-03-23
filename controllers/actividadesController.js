@@ -48,19 +48,19 @@ class ActividadController {
 
   // POST /actividades - Crear nueva actividad
   static async crear(req, res) {
-    const { nombre, descripcion, fecha_inicio, fecha_fin, id_grupo } = req.body;
+    const { nombre_actividad, descripcion, fecha_inicio, fecha_fin, id_grupo } = req.body;
 
-    if (!nombre || !descripcion || !fecha_inicio || !fecha_fin || !id_grupo) {
+    if (!nombre_actividad || !descripcion || !fecha_inicio || !fecha_fin || !id_grupo) {
       return res.status(400).json({
         success: false,
         message:
-          "Todos los campos son obligatorios: nombre, descripcion, fecha_inicio, fecha_fin, id_grupo",
+          "Todos los campos son obligatorios: nombre_actividad, descripcion, fecha_inicio, fecha_fin, id_grupo",
       });
     }
 
     try {
       const nuevaActividad = await ActividadModel.crear({
-        nombre,
+        nombre_actividad,
         descripcion,
         fecha_inicio,
         fecha_fin,
@@ -86,19 +86,14 @@ class ActividadController {
   static async obtenerPorEstudiante(req, res) {
     const { id_estudiante } = req.params;
     try {
-      const actividades = await ActividadModel.obtenerPorEstudiante(
-        id_estudiante
-      );
+      const actividades = await ActividadModel.obtenerPorEstudiante(id_estudiante);
       return res.status(200).json({
         success: true,
         data: actividades,
         message: "Actividades del estudiante obtenidas correctamente",
       });
     } catch (error) {
-      console.error(
-        `Error al obtener actividades del estudiante ${id_estudiante}:`,
-        error
-      );
+      console.error(`Error al obtener actividades del estudiante ${id_estudiante}:`, error);
       return res.status(500).json({
         success: false,
         message: "Error al obtener actividades del estudiante",

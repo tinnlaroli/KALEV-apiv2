@@ -12,6 +12,7 @@ const sesionJuegosRoutes = require('./sesionJuegosRoutes');
 const comprasRoutes = require('./comprasRoutes');
 const itemsRoutes = require('./itemsRoutes');
 const estrategiasRoutes = require('./estrategiasRoutes');
+const historialController = require('./historialRoutes');
 
 // Registro de rutas bajo prefijos
 router.use('/usuarios', userRoutes);
@@ -24,6 +25,7 @@ router.use('/sesiones_juego', sesionJuegosRoutes);
 router.use('/compras', comprasRoutes);
 router.use('/items', itemsRoutes);
 router.use('/estrategias_ensenanza', estrategiasRoutes);
+router.use('/historial', historialController);
 
 // Exportar el enrutador principal
 module.exports = router;
