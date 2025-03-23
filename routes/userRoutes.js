@@ -1,28 +1,20 @@
 const express = require('express');
+const router = express.Router();
 const UserController = require('../controllers/userController');
 
-const router = express.Router();
+// Registrar un nuevo usuario
+router.post('/register', UserController.registrar);
 
-// Rutas GET
-router.get('/user/:id', UserController.getUserById);
-router.get('/student/:id', UserController.getStudentById);
-router.get('/teacher/:id', UserController.getTeacherById);
-router.get('/tutor/:id', UserController.getTutorById);
-router.get('/director/:id', UserController.getDirectorById);
+// Iniciar sesión
+router.post('/login', UserController.login);
 
-// Rutas PUT
-router.put('/user/:id', UserController.updateUser);
-router.put('/student/:id', UserController.updateStudent);
-router.put('/teacher/:id', UserController.updateTeacher);
-router.put('/tutor/:id', UserController.updateTutor);
-router.put('/director/:id', UserController.updateDirector);
+// Obtener usuario por ID
+router.get('/:id', UserController.obtenerPorId);
 
-// Rutas POST
-router.post('/user/', UserController.createUser);
-router.post('/student/', UserController.createStudent);
-router.post('/teacher/', UserController.createTeacher);
-router.post('/tutor/', UserController.createTutor);
-router.post('/director/', UserController.createDirector);
-router.post('/login', UserController.loginUser);
+// Obtener usuarios por rol
+router.get('/rol/:rol', UserController.obtenerPorRol);
+
+// Actualizar usuario
+router.put('/:id', UserController.actualizar);
 
 module.exports = router;
