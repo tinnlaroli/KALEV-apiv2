@@ -1,4 +1,4 @@
-const { pool } = require("../config/db");
+const pool = require("../config/db");
 
 class MetricaModel {
   // Obtener métricas por jugador
@@ -18,21 +18,38 @@ class MetricaModel {
 
   // Registrar nueva métrica
   static async crear(data) {
-    const { id_juego, id_jugador, puntuacion, tiempo, intentos, progreso } = data;
+    const {
+      id_juego,
+      id_jugador,
+      puntuacion,
+      tiempo_empleado,
+      fecha_completado,
+      intentos,
+      progreso_porcentaje
+    } = data;
 
     try {
       const query = `
-        INSERT INTO metricas (id_juego, id_jugador, puntuacion, tiempo, intentos, progreso)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO metricas (
+          id_juego,
+          id_jugador,
+          puntuacion,
+          tiempo_empleado,
+          fecha_completado,
+          intentos,
+          progreso_porcentaje
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING *
       `;
       const { rows } = await pool.query(query, [
         id_juego,
         id_jugador,
         puntuacion,
-        tiempo,
+        tiempo_empleado,
+        fecha_completado,
         intentos,
-        progreso
+        progreso_porcentaje
       ]);
       return rows[0];
     } catch (error) {

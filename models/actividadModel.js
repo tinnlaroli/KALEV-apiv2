@@ -1,4 +1,4 @@
-const { pool } = require("../config/db");
+const pool = require("../config/db");
 
 class ActividadModel {
   // Obtener todas las actividades
@@ -27,16 +27,16 @@ class ActividadModel {
 
   // Crear nueva actividad
   static async crear(data) {
-    const { nombre, descripcion, fecha_inicio, fecha_fin, id_grupo } = data;
+    const { nombre_actividad, descripcion, fecha_inicio, fecha_fin, id_grupo } = data;
 
     try {
       const query = `
-        INSERT INTO actividades (nombre, descripcion, fecha_inicio, fecha_fin, id_grupo)
+        INSERT INTO actividades (nombre_actividad, descripcion, fecha_inicio, fecha_fin, id_grupo)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING *
       `;
       const { rows } = await pool.query(query, [
-        nombre,
+        nombre_actividad,
         descripcion,
         fecha_inicio,
         fecha_fin,

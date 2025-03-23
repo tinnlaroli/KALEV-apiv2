@@ -1,7 +1,7 @@
-const { pool } = require("../config/db");
+const pool = require("../config/db");
 
 class HistorialModel {
-  // Obtener el historial de un estudiante
+  // Obtener historial de recomendaciones por estudiante
   static async obtenerPorEstudiante(id_estudiante) {
     try {
       const query = `
@@ -16,10 +16,8 @@ class HistorialModel {
     }
   }
 
-  // Registrar una nueva recomendación
-  static async crear(data) {
-    const { id_estudiante, id_tema, id_estrategia, efectividad } = data;
-
+  // Crear una nueva entrada en el historial
+  static async crear({ id_estudiante, id_tema, id_estrategia, efectividad }) {
     try {
       const query = `
         INSERT INTO historial_recomendaciones (id_estudiante, id_tema, id_estrategia, efectividad)

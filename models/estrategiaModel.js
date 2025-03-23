@@ -1,4 +1,4 @@
-const { pool } = require("../config/db");
+const pool = require("../config/db");
 
 class EstrategiaModel {
   // Obtener todas las estrategias
@@ -27,15 +27,15 @@ class EstrategiaModel {
 
   // Crear una nueva estrategia
   static async crear(data) {
-    const { descripcion, estilo, tema } = data;
+    const { descripcion, estilo_asociado, id_tema } = data;
 
     try {
       const query = `
-        INSERT INTO estrategias_ensenanza (descripcion, estilo, tema)
+        INSERT INTO estrategias_ensenanza (descripcion, estilo_asociado, id_tema)
         VALUES ($1, $2, $3)
         RETURNING *
       `;
-      const { rows } = await pool.query(query, [descripcion, estilo, tema]);
+      const { rows } = await pool.query(query, [descripcion, estilo_asociado, id_tema]);
       return rows[0];
     } catch (error) {
       console.error("Error al crear la estrategia:", error);

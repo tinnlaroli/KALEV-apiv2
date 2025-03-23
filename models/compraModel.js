@@ -1,4 +1,4 @@
-const { pool } = require("../config/db");
+const pool = require("../config/db");
 
 class ComprasModel {
   // Obtener todas las compras
@@ -31,8 +31,8 @@ class ComprasModel {
 
     try {
       const query = `
-        INSERT INTO compras (id_usuario, id_item, cantidad, costo_total)
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO compras (id_usuario, id_item, fecha_compra, cantidad, costo_total)
+        VALUES ($1, $2, CURRENT_TIMESTAMP, $3, $4)
         RETURNING *
       `;
       const { rows } = await pool.query(query, [

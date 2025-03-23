@@ -1,4 +1,4 @@
-const { pool } = require("../config/db");
+const pool = require("../config/db");
 
 class UserModel {
   // Obtener usuario por ID
@@ -14,34 +14,51 @@ class UserModel {
   }
 
   // Obtener usuarios por rol
-  static async obtenerPorRol(rol) {
+  static async obtenerPorRol(id_rol) {
     try {
-      const query = "SELECT * FROM usuarios WHERE rol = $1";
-      const { rows } = await pool.query(query, [rol]);
+      const query = "SELECT * FROM usuarios WHERE id_rol = $1";
+      const { rows } = await pool.query(query, [id_rol]);
       return rows;
     } catch (error) {
-      console.error(`Error al obtener usuarios con rol ${rol}:`, error);
+      console.error(`Error al obtener usuarios con id_rol ${id_rol}:`, error);
       throw error;
     }
   }
 
   // Registrar nuevo usuario
   static async registrar(data) {
-    const { nombre, apellidos, correo, telefono, rol, password } = data;
+    const {
+      nombre_usuario,
+      ap_paterno,
+      ap_materno,
+      correo,
+      telefono,
+      id_rol,
+      contrasenia
+    } = data;
 
     try {
       const query = `
-        INSERT INTO usuarios (nombre, apellidos, correo, telefono, rol, password)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO usuarios (
+          nombre_usuario,
+          ap_paterno,
+          ap_materno,
+          correo,
+          telefono,
+          id_rol,
+          contrasenia
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING *
       `;
       const { rows } = await pool.query(query, [
-        nombre,
-        apellidos,
+        nombre_usuario,
+        ap_paterno,
+        ap_materno || null,
         correo,
         telefono,
-        rol,
-        password
+        id_rol,
+        contrasenia
       ]);
       return rows[0];
     } catch (error) {

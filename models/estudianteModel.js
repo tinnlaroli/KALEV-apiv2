@@ -1,4 +1,4 @@
-const { pool } = require("../config/db");
+const pool = require("../config/db");
 
 class EstudianteModel {
   // Obtener todos los estudiantes
@@ -27,15 +27,34 @@ class EstudianteModel {
 
   // Crear un nuevo estudiante
   static async crear(data) {
-    const { nombre, apellidos, correo, id_grupo } = data;
+    const {
+      nombre,
+      ap_paterno,
+      ap_materno = null,
+      fecha_nacimiento,
+      correo,
+      telefono,
+      id_grupo
+    } = data;
 
     try {
       const query = `
-        INSERT INTO estudiantes (nombre, apellidos, correo, id_grupo)
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO estudiantes (
+          nombre, ap_paterno, ap_materno, fecha_nacimiento,
+          correo, telefono, id_grupo, fecha_registro
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP)
         RETURNING *
       `;
-      const { rows } = await pool.query(query, [nombre, apellidos, correo, id_grupo]);
+      const { rows } = await pool.query(query, [
+        nombre,
+        ap_paterno,
+        ap_materno,
+        fecha_nacimiento,
+        correo,
+        telefono,
+        id_grupo
+      ]);
       return rows[0];
     } catch (error) {
       console.error("Error al crear el estudiante:", error);

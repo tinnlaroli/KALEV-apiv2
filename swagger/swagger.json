@@ -1,292 +1,126 @@
 {
-  "openapi": "3.0.0",
+  "openapi": "3.0.3",
   "info": {
-    "title": "API de KALEV - Grupos",
-    "description": "Documentación de la API para la gestión de grupos",
+    "title": "API de KALEV",
+    "description": "Documentación de la API para la plataforma KALEV - App Móvil y Dashboard Educativo.",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://localhost:3000/api/v1/",
+      "url": "http://localhost:3000/api/v1",
       "description": "Servidor local"
     }
   ],
-  "tags": [
-    {
-      "name": "Grupos",
-      "description": "Operaciones relacionadas con los grupos"
-    },
-    {
-      "name": "Estudiantes",
-      "description": "Operaciones relacionadas con los estudiantes"
-    }
-  ],
   "paths": {
-
-    "/grupos": {
-      "get": {
-        "tags": ["Grupos"],
-        "summary": "Obtener todos los grupos",
-        "description": "Devuelve una lista de todos los grupos disponibles.",
-        "responses": {
-          "200": {
-            "description": "Lista de grupos obtenida correctamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GrupoConDetalles"
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Error interno del servidor"
-          }
-        }
-      },
+    "/usuarios/register": {
       "post": {
-        "tags": ["Grupos"],
-        "summary": "Crear un nuevo grupo",
-        "description": "Permite a los administradores o docentes crear un grupo.",
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Registrar un nuevo usuario",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GrupoCreacion"
+                "type": "object",
+                "properties": {
+                  "nombre": {
+                    "type": "string"
+                  },
+                  "apellidos": {
+                    "type": "string"
+                  },
+                  "correo": {
+                    "type": "string"
+                  },
+                  "telefono": {
+                    "type": "string"
+                  },
+                  "rol": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "nombre",
+                  "apellidos",
+                  "correo",
+                  "telefono",
+                  "rol",
+                  "password"
+                ]
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Grupo creado correctamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Grupo"
-                }
-              }
-            }
+            "description": "Usuario registrado correctamente"
           },
           "400": {
-            "description": "Solicitud incorrecta"
+            "description": "Error en validación"
           },
           "500": {
-            "description": "Error interno del servidor"
+            "description": "Error interno"
           }
         }
       }
     },
-    "/grupos/{id}": {
-      "get": {
-        "tags": ["Grupos"],
-        "summary": "Obtener detalles de un grupo específico",
-        "description": "Devuelve la información de un grupo a partir de su ID.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "ID del grupo a consultar",
-            "schema": {
-              "type": "integer"
-            }
-          }
+    "/usuarios/login": {
+      "post": {
+        "tags": [
+          "Usuarios"
         ],
-        "responses": {
-          "200": {
-            "description": "Grupo obtenido correctamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GrupoConDetalles"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Grupo no encontrado"
-          },
-          "500": {
-            "description": "Error interno del servidor"
-          }
-        }
-      },
-      "put": {
-        "tags": ["Grupos"],
-        "summary": "Actualizar un grupo existente",
-        "description": "Permite actualizar la información de un grupo a partir de su ID.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "ID del grupo a actualizar",
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
+        "summary": "Iniciar sesión con correo y contraseña",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GrupoActualizacion"
+                "type": "object",
+                "properties": {
+                  "correo": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "correo",
+                  "password"
+                ]
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Grupo actualizado correctamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Grupo"
-                }
-              }
-            }
+            "description": "Inicio de sesión exitoso"
           },
-          "400": {
-            "description": "Solicitud incorrecta"
-          },
-          "404": {
-            "description": "Grupo no encontrado"
+          "401": {
+            "description": "Credenciales inválidas"
           },
           "500": {
-            "description": "Error interno del servidor"
+            "description": "Error interno"
           }
         }
-      },
-      "delete": {
-        "tags": ["Grupos"],
-        "summary": "Eliminar un grupo",
-        "description": "Permite eliminar un grupo a partir de su ID.",
+      }
+    },
+    "/usuarios/{id}": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Obtener los detalles de un usuario por su ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "ID del grupo a eliminar",
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Grupo eliminado correctamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Grupo"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Grupo no encontrado"
-          },
-          "500": {
-            "description": "Error interno del servidor"
-          }
-        }
-      }
-    },
-    "/grupos/docente/{id_docente}": {
-      "get": {
-        "tags": ["Grupos"],
-        "summary": "Obtener grupos por docente",
-        "description": "Devuelve todos los grupos asignados a un docente específico.",
-        "parameters": [
-          {
-            "name": "id_docente",
-            "in": "path",
-            "required": true,
-            "description": "ID del docente",
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Grupos obtenidos correctamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GrupoConDetalles"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Docente no encontrado o sin grupos asignados"
-          },
-          "500": {
-            "description": "Error interno del servidor"
-          }
-        }
-      }
-    },
-    "/grupos/director/{id_director}": {
-      "get": {
-        "tags": ["Grupos"],
-        "summary": "Obtener grupos por director",
-        "description": "Devuelve todos los grupos asignados a un director específico.",
-        "parameters": [
-          {
-            "name": "id_director",
-            "in": "path",
-            "required": true,
-            "description": "ID del director",
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Grupos obtenidos correctamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GrupoConDetalles"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Director no encontrado o sin grupos asignados"
-          },
-          "500": {
-            "description": "Error interno del servidor"
-          }
-        }
-      }
-    },
-    "/grupos/grado/{grado}": {
-      "get": {
-        "tags": ["Grupos"],
-        "summary": "Obtener grupos por grado",
-        "description": "Devuelve todos los grupos de un grado específico.",
-        "parameters": [
-          {
-            "name": "grado",
-            "in": "path",
-            "required": true,
-            "description": "Grado escolar (ej. 6° Primaria)",
             "schema": {
               "type": "string"
             }
@@ -294,96 +128,142 @@
         ],
         "responses": {
           "200": {
-            "description": "Grupos obtenidos correctamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GrupoConDetalles"
-                  }
-                }
-              }
-            }
+            "description": "Usuario encontrado"
           },
           "404": {
-            "description": "No se encontraron grupos para el grado especificado"
-          },
-          "500": {
-            "description": "Error interno del servidor"
-          }
-        }
-      }
-    },
-    "/estudiantes": {
-      "get": {
-        "tags": ["Estudiantes"],
-        "summary": "Obtener todos los estudiantes",
-        "description": "Devuelve una lista de todos los estudiantes disponibles ordenados por apellido paterno y nombre.",
-        "responses": {
-          "200": {
-            "description": "Lista de estudiantes obtenida correctamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Estudiante"
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Error interno del servidor"
+            "description": "Usuario no encontrado"
           }
         }
       },
-      "post": {
-        "tags": ["Estudiantes"],
-        "summary": "Crear un nuevo estudiante",
-        "description": "Permite crear un nuevo estudiante.",
+      "put": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Actualizar información de un usuario",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EstudianteCreacion"
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuario actualizado"
+          },
+          "404": {
+            "description": "Usuario no encontrado"
+          },
+          "500": {
+            "description": "Error interno"
+          }
+        }
+      }
+    },
+    "/usuarios/rol/{rol}": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Obtener lista de usuarios por rol",
+        "parameters": [
+          {
+            "name": "rol",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuarios obtenidos correctamente"
+          },
+          "500": {
+            "description": "Error interno"
+          }
+        }
+      }
+    },
+    "/grupos": {
+      "get": {
+        "tags": [
+          "Grupos"
+        ],
+        "summary": "Obtener todos los grupos",
+        "responses": {
+          "200": {
+            "description": "Lista de grupos"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Grupos"
+        ],
+        "summary": "Crear un nuevo grupo",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nombre_grupo": {
+                    "type": "string"
+                  },
+                  "id_docente": {
+                    "type": "integer"
+                  },
+                  "id_director": {
+                    "type": "integer"
+                  },
+                  "grado": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "nombre_grupo",
+                  "id_docente",
+                  "id_director",
+                  "grado"
+                ]
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Estudiante creado correctamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Estudiante"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Solicitud incorrecta"
-          },
-          "500": {
-            "description": "Error interno del servidor"
+            "description": "Grupo creado"
           }
         }
       }
     },
-    "/estudiantes/{id}": {
+    "/grupos/{id}": {
       "get": {
-        "tags":["Estudiantes"],
-        "summary": "Obtener detalles de un estudiante específico",
-        "description": "Devuelve la información de un estudiante a partir de su ID.",
+        "tags": [
+          "Grupos"
+        ],
+        "summary": "Obtener grupo por ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "ID del estudiante a consultar",
             "schema": {
               "type": "integer"
             }
@@ -391,33 +271,23 @@
         ],
         "responses": {
           "200": {
-            "description": "Estudiante obtenido correctamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Estudiante"
-                }
-              }
-            }
+            "description": "Grupo encontrado"
           },
           "404": {
-            "description": "Estudiante no encontrado"
-          },
-          "500": {
-            "description": "Error interno del servidor"
+            "description": "No encontrado"
           }
         }
       },
       "put": {
-        "tags": ["Estudiantes"],
-        "summary": "Actualizar un estudiante existente",
-        "description": "Permite actualizar la información de un estudiante a partir de su ID.",
+        "tags": [
+          "Grupos"
+        ],
+        "summary": "Actualizar un grupo",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "ID del estudiante a actualizar",
             "schema": {
               "type": "integer"
             }
@@ -428,43 +298,27 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EstudianteActualizacion"
+                "type": "object"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Estudiante actualizado correctamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Estudiante"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Solicitud incorrecta"
-          },
-          "404": {
-            "description": "Estudiante no encontrado"
-          },
-          "500": {
-            "description": "Error interno del servidor"
+            "description": "Grupo actualizado"
           }
         }
       },
       "delete": {
-        "tags": ["Estudiantes"],
-        "summary": "Eliminar un estudiante",
-        "description": "Permite eliminar un estudiante a partir de su ID.",
+        "tags": [
+          "Grupos"
+        ],
+        "summary": "Eliminar un grupo",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "ID del estudiante a eliminar",
             "schema": {
               "type": "integer"
             }
@@ -472,35 +326,171 @@
         ],
         "responses": {
           "200": {
-            "description": "Estudiante eliminado correctamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Estudiante"
-                }
+            "description": "Grupo eliminado"
+          }
+        }
+      }
+    },
+    "/grupos/docente/{id_docente}": {
+      "get": {
+        "tags": [
+          "Grupos"
+        ],
+        "summary": "Obtener grupos por docente",
+        "parameters": [
+          {
+            "name": "id_docente",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Grupos del docente"
+          }
+        }
+      }
+    },
+    "/grupos/director/{id_director}": {
+      "get": {
+        "tags": [
+          "Grupos"
+        ],
+        "summary": "Obtener grupos por director",
+        "parameters": [
+          {
+            "name": "id_director",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Grupos del director"
+          }
+        }
+      }
+    },
+    "/grupos/grado/{grado}": {
+      "get": {
+        "tags": [
+          "Grupos"
+        ],
+        "summary": "Obtener grupos por grado",
+        "parameters": [
+          {
+            "name": "grado",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Grupos del grado"
+          }
+        }
+      }
+    },
+    "/estudiantes": {
+      "get": {
+        "tags": [
+          "Estudiantes"
+        ],
+        "summary": "Obtener todos los estudiantes",
+        "responses": {
+          "200": {
+            "description": "Lista de estudiantes"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Estudiantes"
+        ],
+        "summary": "Registrar un nuevo estudiante",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nombre": {
+                    "type": "string"
+                  },
+                  "apellidos": {
+                    "type": "string"
+                  },
+                  "correo": {
+                    "type": "string"
+                  },
+                  "id_grupo": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "nombre",
+                  "apellidos",
+                  "correo",
+                  "id_grupo"
+                ]
               }
             }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Estudiante creado"
+          }
+        }
+      }
+    },
+    "/estudiantes/{id}": {
+      "get": {
+        "tags": [
+          "Estudiantes"
+        ],
+        "summary": "Obtener un estudiante por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estudiante encontrado"
           },
           "404": {
-            "description": "Estudiante no encontrado"
-          },
-          "500": {
-            "description": "Error interno del servidor"
+            "description": "No encontrado"
           }
         }
       }
     },
     "/estudiantes/grupo/{id_grupo}": {
       "get": {
-        "tags": ["Estudiantes"],
-        "summary": "Obtener estudiantes por grupo",
-        "description": "Devuelve todos los estudiantes que pertenecen a un grupo específico.",
+        "tags": [
+          "Estudiantes"
+        ],
+        "summary": "Obtener estudiantes de un grupo",
         "parameters": [
           {
             "name": "id_grupo",
             "in": "path",
             "required": true,
-            "description": "ID del grupo",
             "schema": {
               "type": "integer"
             }
@@ -508,236 +498,602 @@
         ],
         "responses": {
           "200": {
-            "description": "Estudiantes obtenidos correctamente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Estudiante"
+            "description": "Estudiantes encontrados"
+          }
+        }
+      }
+    },
+    "/actividades": {
+      "get": {
+        "tags": [
+          "Actividades"
+        ],
+        "summary": "Obtener todas las actividades",
+        "responses": {
+          "200": {
+            "description": "Lista de actividades"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Actividades"
+        ],
+        "summary": "Crear una nueva actividad",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nombre": {
+                    "type": "string"
+                  },
+                  "descripcion": {
+                    "type": "string"
+                  },
+                  "fechas": {
+                    "type": "string"
+                  },
+                  "grupo": {
+                    "type": "integer"
                   }
-                }
+                },
+                "required": [
+                  "nombre",
+                  "descripcion",
+                  "fechas",
+                  "grupo"
+                ]
               }
             }
-          },
-          "404": {
-            "description": "Grupo no encontrado o sin estudiantes asignados"
-          },
-          "500": {
-            "description": "Error interno del servidor"
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Actividad creada"
+          }
+        }
+      }
+    },
+    "/actividades/{id}": {
+      "get": {
+        "tags": [
+          "Actividades"
+        ],
+        "summary": "Obtener detalles de una actividad",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Actividad encontrada"
+          }
+        }
+      }
+    },
+    "/actividades/estudiante/{id_estudiante}": {
+      "get": {
+        "tags": [
+          "Actividades"
+        ],
+        "summary": "Obtener actividades de un estudiante",
+        "parameters": [
+          {
+            "name": "id_estudiante",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Actividades encontradas"
+          }
+        }
+      }
+    },
+    "/juegos": {
+      "get": {
+        "tags": [
+          "Juegos"
+        ],
+        "summary": "Obtener todos los juegos",
+        "responses": {
+          "200": {
+            "description": "Lista de juegos"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Juegos"
+        ],
+        "summary": "Crear un nuevo juego",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nombre": {
+                    "type": "string"
+                  },
+                  "descripcion": {
+                    "type": "string"
+                  },
+                  "categoria": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "nombre",
+                  "descripcion",
+                  "categoria"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Juego creado"
+          }
+        }
+      }
+    },
+    "/juegos/{id}": {
+      "get": {
+        "tags": [
+          "Juegos"
+        ],
+        "summary": "Obtener detalles de un juego",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Juego encontrado"
+          }
+        }
+      }
+    },
+    "/metricas": {
+      "post": {
+        "tags": [
+          "Métricas"
+        ],
+        "summary": "Registrar métricas de un jugador",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id_juego": {
+                    "type": "integer"
+                  },
+                  "id_jugador": {
+                    "type": "integer"
+                  },
+                  "puntuacion": {
+                    "type": "integer"
+                  },
+                  "tiempo": {
+                    "type": "number"
+                  },
+                  "intentos": {
+                    "type": "integer"
+                  },
+                  "progreso": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "id_juego",
+                  "id_jugador",
+                  "puntuacion",
+                  "tiempo",
+                  "intentos",
+                  "progreso"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Métricas registradas"
+          }
+        }
+      }
+    },
+    "/metricas/{id_jugador}": {
+      "get": {
+        "tags": [
+          "Métricas"
+        ],
+        "summary": "Obtener métricas por jugador",
+        "parameters": [
+          {
+            "name": "id_jugador",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Métricas del jugador"
+          }
+        }
+      }
+    },
+    "/sesiones_juego": {
+      "post": {
+        "tags": [
+          "Sesiones de Juego"
+        ],
+        "summary": "Registrar una sesión de juego",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id_jugador": {
+                    "type": "integer"
+                  },
+                  "id_juego": {
+                    "type": "integer"
+                  },
+                  "fecha": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "duracion": {
+                    "type": "number"
+                  },
+                  "intentos": {
+                    "type": "integer"
+                  },
+                  "monedas_ganadas": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "id_jugador",
+                  "id_juego",
+                  "fecha",
+                  "duracion",
+                  "intentos",
+                  "monedas_ganadas"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Sesión registrada"
+          }
+        }
+      }
+    },
+    "/sesiones_juego/{id_jugador}": {
+      "get": {
+        "tags": [
+          "Sesiones de Juego"
+        ],
+        "summary": "Obtener sesiones de un jugador",
+        "parameters": [
+          {
+            "name": "id_jugador",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sesiones obtenidas"
+          }
+        }
+      }
+    },
+    "/compras": {
+      "get": {
+        "tags": [
+          "Compras"
+        ],
+        "summary": "Obtener todas las compras",
+        "responses": {
+          "200": {
+            "description": "Lista de compras"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Compras"
+        ],
+        "summary": "Registrar una nueva compra",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id_usuario": {
+                    "type": "integer"
+                  },
+                  "id_item": {
+                    "type": "integer"
+                  },
+                  "cantidad": {
+                    "type": "integer"
+                  },
+                  "costo_total": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "id_usuario",
+                  "id_item",
+                  "cantidad",
+                  "costo_total"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Compra registrada"
+          }
+        }
+      }
+    },
+    "/compras/{id}": {
+      "get": {
+        "tags": [
+          "Compras"
+        ],
+        "summary": "Obtener una compra por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Compra encontrada"
+          }
+        }
+      }
+    },
+    "/items": {
+      "get": {
+        "tags": [
+          "Ítems"
+        ],
+        "summary": "Obtener todos los ítems",
+        "responses": {
+          "200": {
+            "description": "Lista de ítems"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Ítems"
+        ],
+        "summary": "Crear un nuevo ítem",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nombre": {
+                    "type": "string"
+                  },
+                  "descripcion": {
+                    "type": "string"
+                  },
+                  "costo": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "nombre",
+                  "descripcion",
+                  "costo"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ítem creado"
+          }
+        }
+      }
+    },
+    "/items/{id}": {
+      "get": {
+        "tags": [
+          "Ítems"
+        ],
+        "summary": "Obtener un ítem por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ítem encontrado"
+          }
+        }
+      }
+    },
+    "/estrategias_ensenanza": {
+      "get": {
+        "tags": [
+          "Estrategias de Enseñanza"
+        ],
+        "summary": "Obtener todas las estrategias de enseñanza",
+        "responses": {
+          "200": {
+            "description": "Lista de estrategias"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Estrategias de Enseñanza"
+        ],
+        "summary": "Crear una nueva estrategia de enseñanza",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "descripcion": {
+                    "type": "string"
+                  },
+                  "estilo_asociado": {
+                    "type": "string"
+                  },
+                  "tema": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "descripcion",
+                  "estilo_asociado",
+                  "tema"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Estrategia registrada"
+          }
+        }
+      }
+    },
+    "/estrategias_ensenanza/{id}": {
+      "get": {
+        "tags": [
+          "Estrategias de Enseñanza"
+        ],
+        "summary": "Obtener una estrategia por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estrategia encontrada"
           }
         }
       }
     }
   },
   "components": {
-    "schemas": {
-      "GrupoConDetalles": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "nombre": {
-            "type": "string"
-          },
-          "grado": {
-            "type": "string"
-          },
-          "descripcion": {
-            "type": "string"
-          },
-          "docente": {
-            "$ref": "#/components/schemas/Usuario"
-          },
-          "director": {
-            "$ref": "#/components/schemas/Usuario"
-          },
-          "estudiantes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Estudiante"
-            }
-          }
-        }
-      },
-      "Grupo": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "nombre": {
-            "type": "string"
-          },
-          "grado": {
-            "type": "string"
-          },
-          "descripcion": {
-            "type": "string"
-          },
-          "id_docente": {
-            "type": "integer"
-          },
-          "id_director": {
-            "type": "integer"
-          }
-        }
-      },
-      "GrupoCreacion": {
-        "type": "object",
-        "required": ["nombre", "grado", "id_docente", "id_director"],
-        "properties": {
-          "nombre": {
-            "type": "string"
-          },
-          "grado": {
-            "type": "string"
-          },
-          "descripcion": {
-            "type": "string"
-          },
-          "id_docente": {
-            "type": "integer"
-          },
-          "id_director": {
-            "type": "integer"
-          }
-        }
-      },
-      "GrupoActualizacion": {
-        "type": "object",
-        "properties": {
-          "nombre": {
-            "type": "string"
-          },
-          "grado": {
-            "type": "string"
-          },
-          "descripcion": {
-            "type": "string"
-          },
-          "id_docente": {
-            "type": "integer"
-          },
-          "id_director": {
-            "type": "integer"
-          }
-        }
-      },
-      "Estudiante": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "nombre": {
-            "type": "string"
-          },
-          "apellido_paterno": {
-            "type": "string"
-          },
-          "apellido_materno": {
-            "type": "string"
-          },
-          "fecha_nacimiento": {
-            "type": "string",
-            "format": "date"
-          },
-          "id_grupo": {
-            "type": "integer"
-          },
-          "correo": {
-            "type": "string",
-            "format": "email"
-          },
-          "telefono": {
-            "type": "string"
-          }
-        }
-      },
-      "EstudianteCreacion": {
-        "type": "object",
-        "required": ["nombre", "apellido_paterno", "id_grupo"],
-        "properties": {
-          "nombre": {
-            "type": "string"
-          },
-          "apellido_paterno": {
-            "type": "string"
-          },
-          "apellido_materno": {
-            "type": "string"
-          },
-          "fecha_nacimiento": {
-            "type": "string",
-            "format": "date"
-          },
-          "id_grupo": {
-            "type": "integer"
-          },
-          "correo": {
-            "type": "string",
-            "format": "email"
-          },
-          "telefono": {
-            "type": "string"
-          }
-        }
-      },
-      "EstudianteActualizacion": {
-        "type": "object",
-        "properties": {
-          "nombre": {
-            "type": "string"
-          },
-          "apellido_paterno": {
-            "type": "string"
-          },
-          "apellido_materno": {
-            "type": "string"
-          },
-          "fecha_nacimiento": {
-            "type": "string",
-            "format": "date"
-          },
-          "id_grupo": {
-            "type": "integer"
-          },
-          "correo": {
-            "type": "string",
-            "format": "email"
-          },
-          "telefono": {
-            "type": "string"
-          }
-        }
-      },
-      "Usuario": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "nombre": {
-            "type": "string"
-          },
-          "apellido_paterno": {
-            "type": "string"
-          },
-          "apellido_materno": {
-            "type": "string"
-          },
-          "correo": {
-            "type": "string",
-            "format": "email"
-          },
-          "rol": {
-            "type": "string",
-            "enum": ["docente", "director", "administrador"]
-          }
-        }
+    "schemas": {},
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
-  }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Usuarios"
+    },
+    {
+      "name": "Grupos"
+    },
+    {
+      "name": "Estudiantes"
+    },
+    {
+      "name": "Actividades"
+    },
+    {
+      "name": "Juegos"
+    },
+    {
+      "name": "Métricas"
+    },
+    {
+      "name": "Sesiones de Juego"
+    },
+    {
+      "name": "Compras"
+    },
+    {
+      "name": "Ítems"
+    },
+    {
+      "name": "Estrategias de Enseñanza"
+    }
+  ]
 }

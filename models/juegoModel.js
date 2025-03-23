@@ -1,10 +1,10 @@
-const { pool } = require("../config/db");
+const pool = require("../config/db");
 
 class JuegoModel {
   // Obtener todos los juegos
   static async obtenerTodos() {
     try {
-      const query = "SELECT * FROM juegos";
+      const query = "SELECT * FROM juego";
       const { rows } = await pool.query(query);
       return rows;
     } catch (error) {
@@ -14,28 +14,40 @@ class JuegoModel {
   }
 
   // Obtener juego por ID
-  static async obtenerPorId(id) {
+  static async obtenerPorId(id_juego) {
     try {
-      const query = "SELECT * FROM juegos WHERE id_juego = $1";
-      const { rows } = await pool.query(query, [id]);
+      const query = "SELECT * FROM juego WHERE id_juego = $1";
+      const { rows } = await pool.query(query, [id_juego]);
       return rows[0];
     } catch (error) {
-      console.error(`Error al obtener el juego con ID ${id}:`, error);
+      console.error(`Error al obtener el juego con ID ${id_juego}:`, error);
       throw error;
     }
   }
 
   // Crear nuevo juego
   static async crear(data) {
-    const { nombre, descripcion, categoria } = data;
+    const {
+      nombre_juego,
+      descripcion,
+      nivel,
+      id_materia,
+      id_estilo
+    } = data;
 
     try {
       const query = `
-        INSERT INTO juegos (nombre, descripcion, categoria)
-        VALUES ($1, $2, $3)
+        INSERT INTO juego (nombre_juego, descripcion, nivel, id_materia, id_estilo)
+        VALUES ($1, $2, $3, $4, $5)
         RETURNING *
       `;
-      const { rows } = await pool.query(query, [nombre, descripcion, categoria]);
+      const { rows } = await pool.query(query, [
+        nombre_juego,
+        descripcion,
+        nivel,
+        id_materia,
+        id_estilo
+      ]);
       return rows[0];
     } catch (error) {
       console.error("Error al crear el juego:", error);

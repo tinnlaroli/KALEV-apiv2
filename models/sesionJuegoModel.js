@@ -1,4 +1,4 @@
-const { pool } = require("../config/db");
+const pool = require("../config/db");
 
 class SesionJuegoModel {
   // Obtener todas las sesiones de juego de un jugador
@@ -18,11 +18,25 @@ class SesionJuegoModel {
 
   // Registrar nueva sesión de juego
   static async crear(data) {
-    const { id_jugador, id_juego, fecha, duracion, intentos, monedas_ganadas } = data;
+    const {
+      id_jugador,
+      id_juego,
+      fecha,
+      duracion_juego,
+      intentos,
+      monedas_ganadas
+    } = data;
 
     try {
       const query = `
-        INSERT INTO sesiones_juego (id_jugador, id_juego, fecha, duracion, intentos, monedas_ganadas)
+        INSERT INTO sesiones_juego (
+          id_jugador,
+          id_juego,
+          fecha,
+          duracion_juego,
+          intentos,
+          monedas_ganadas
+        )
         VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING *
       `;
@@ -30,7 +44,7 @@ class SesionJuegoModel {
         id_jugador,
         id_juego,
         fecha,
-        duracion,
+        duracion_juego,
         intentos,
         monedas_ganadas
       ]);
