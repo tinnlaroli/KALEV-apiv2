@@ -1,25 +1,43 @@
-const pool = require('../config/db');
+const { pool } = require("../config/db");
 
-// Modelo para Historial
-class Historial {
-    // Obtener historial de recomendaciones de un estudiante
-    static async getHistorialRecomendaciones(id_estudiante) {
-        const result = await pool.query(
-            'SELECT * FROM historial_recomendaciones WHERE id_estudiante = $1',
-            [id_estudiante]
-        );
-        return result.rows;
+class HistorialModel {
+  // Obtener el historial de un estudiante
+  static async obtenerPorEstudiante(id_estudiante) {
+    try {
+      const query = `
+        SELECT * FROM historial_recomendaciones
+        WHERE id_estudiante = $1
+      `;
+      const { rows } = await pool.query(query, [id_estudiante]);
+      return rows;
+    } catch (error) {
+      console.error(`Error al obtener historial del estudiante con ID ${id_estudiante}:`, error);
+      throw error;
     }
+  }
 
-    // Registrar una recomendación para un estudiante
-    static async createRecomendacion(data) {
-        const { id_estudiante, id_tema, id_estrategia, efectividad } = data;
-        const result = await pool.query(
-            'INSERT INTO historial_recomendaciones (id_estudiante, id_tema, id_estrategia, efectividad) VALUES ($1, $2, $3, $4) RETURNING *;',
-            [id_estudiante, id_tema, id_estrategia, efectividad]
-        );
-        return result.rows[0];
+  // Registrar una nueva recomendación
+  static async crear(data) {
+    const { id_estudiante, id_tema, id_estrategia, efectividad } = data;
+
+    try {
+      const query = `
+        INSERT INTO historial_recomendaciones (id_estudiante, id_tema, id_estrategia, efectividad)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *
+      `;
+      const { rows } = await pool.query(query, [
+        id_estudiante,
+        id_tema,
+        id_estrategia,
+        efectividad
+      ]);
+      return rows[0];
+    } catch (error) {
+      console.error("Error al registrar recomendación:", error);
+      throw error;
     }
+  }
 }
 
-module.exports = Historial;
+module.exports = HistorialModel;
