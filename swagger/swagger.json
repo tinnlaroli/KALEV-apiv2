@@ -14,9 +14,7 @@
   "paths": {
     "/usuarios/register": {
       "post": {
-        "tags": [
-          "Usuarios"
-        ],
+        "tags": ["Usuarios"],
         "summary": "Registrar un nuevo usuario",
         "requestBody": {
           "required": true,
@@ -25,32 +23,42 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "nombre": {
-                    "type": "string"
+                  "nombre_usuario": {
+                    "type": "string",
+                    "example": "Juan"
                   },
-                  "apellidos": {
-                    "type": "string"
+                  "ap_paterno": {
+                    "type": "string",
+                    "example": "Pérez"
+                  },
+                  "ap_materno": {
+                    "type": "string",
+                    "example": "Gómez"
                   },
                   "correo": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "juan@example.com"
                   },
                   "telefono": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "1234567890"
                   },
-                  "rol": {
-                    "type": "string"
+                  "id_rol": {
+                    "type": "integer",
+                    "example": 1
                   },
-                  "password": {
-                    "type": "string"
+                  "contrasenia": {
+                    "type": "string",
+                    "example": "123456"
                   }
                 },
                 "required": [
-                  "nombre",
-                  "apellidos",
+                  "nombre_usuario",
+                  "ap_paterno",
                   "correo",
                   "telefono",
-                  "rol",
-                  "password"
+                  "id_rol",
+                  "contrasenia"
                 ]
               }
             }
@@ -71,9 +79,7 @@
     },
     "/usuarios/login": {
       "post": {
-        "tags": [
-          "Usuarios"
-        ],
+        "tags": ["Usuarios"],
         "summary": "Iniciar sesión con correo y contraseña",
         "requestBody": {
           "required": true,
@@ -83,16 +89,15 @@
                 "type": "object",
                 "properties": {
                   "correo": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "juan@example.com"
                   },
-                  "password": {
-                    "type": "string"
+                  "contrasenia": {
+                    "type": "string",
+                    "example": "123456"
                   }
                 },
-                "required": [
-                  "correo",
-                  "password"
-                ]
+                "required": ["correo", "contrasenia"]
               }
             }
           }
@@ -112,9 +117,7 @@
     },
     "/usuarios/{id}": {
       "get": {
-        "tags": [
-          "Usuarios"
-        ],
+        "tags": ["Usuarios"],
         "summary": "Obtener los detalles de un usuario por su ID",
         "parameters": [
           {
@@ -122,7 +125,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "example": 1
             }
           }
         ],
@@ -136,9 +140,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Usuarios"
-        ],
+        "tags": ["Usuarios"],
         "summary": "Actualizar información de un usuario",
         "parameters": [
           {
@@ -146,7 +148,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "example": 1
             }
           }
         ],
@@ -155,7 +158,21 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object"
+                "type": "object",
+                "properties": {
+                  "nombre_usuario": {
+                    "type": "string",
+                    "example": "Juan Actualizado"
+                  },
+                  "telefono": {
+                    "type": "string",
+                    "example": "9876543210"
+                  },
+                  "correo": {
+                    "type": "string",
+                    "example": "nuevo_correo@example.com"
+                  }
+                }
               }
             }
           }
@@ -173,19 +190,18 @@
         }
       }
     },
-    "/usuarios/rol/{rol}": {
+    "/usuarios/rol/{id_rol}": {
       "get": {
-        "tags": [
-          "Usuarios"
-        ],
-        "summary": "Obtener lista de usuarios por rol",
+        "tags": ["Usuarios"],
+        "summary": "Obtener lista de usuarios por ID de rol",
         "parameters": [
           {
-            "name": "rol",
+            "name": "id_rol",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "example": 2
             }
           }
         ],
@@ -201,20 +217,19 @@
     },
     "/grupos": {
       "get": {
-        "tags": [
-          "Grupos"
-        ],
+        "tags": ["Grupos"],
         "summary": "Obtener todos los grupos",
         "responses": {
           "200": {
-            "description": "Lista de grupos"
+            "description": "Lista de grupos obtenida correctamente"
+          },
+          "500": {
+            "description": "Error interno"
           }
         }
       },
       "post": {
-        "tags": [
-          "Grupos"
-        ],
+        "tags": ["Grupos"],
         "summary": "Crear un nuevo grupo",
         "requestBody": {
           "required": true,
@@ -224,16 +239,20 @@
                 "type": "object",
                 "properties": {
                   "nombre_grupo": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Grupo A"
                   },
                   "id_docente": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                   },
                   "id_director": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 2
                   },
                   "grado": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Primero"
                   }
                 },
                 "required": [
@@ -248,17 +267,21 @@
         },
         "responses": {
           "201": {
-            "description": "Grupo creado"
+            "description": "Grupo creado correctamente"
+          },
+          "400": {
+            "description": "Error en la solicitud"
+          },
+          "500": {
+            "description": "Error interno"
           }
         }
       }
     },
     "/grupos/{id}": {
       "get": {
-        "tags": [
-          "Grupos"
-        ],
-        "summary": "Obtener grupo por ID",
+        "tags": ["Grupos"],
+        "summary": "Obtener un grupo por ID",
         "parameters": [
           {
             "name": "id",
@@ -266,7 +289,8 @@
             "required": true,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "ID único del grupo"
           }
         ],
         "responses": {
@@ -274,15 +298,16 @@
             "description": "Grupo encontrado"
           },
           "404": {
-            "description": "No encontrado"
+            "description": "Grupo no encontrado"
+          },
+          "500": {
+            "description": "Error interno"
           }
         }
       },
       "put": {
-        "tags": [
-          "Grupos"
-        ],
-        "summary": "Actualizar un grupo",
+        "tags": ["Grupos"],
+        "summary": "Actualizar información de un grupo",
         "parameters": [
           {
             "name": "id",
@@ -290,7 +315,8 @@
             "required": true,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "ID del grupo a actualizar"
           }
         ],
         "requestBody": {
@@ -298,22 +324,47 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object"
+                "type": "object",
+                "properties": {
+                  "nombre_grupo": {
+                    "type": "string",
+                    "example": "Grupo B"
+                  },
+                  "id_docente": {
+                    "type": "integer",
+                    "example": 3
+                  },
+                  "id_director": {
+                    "type": "integer",
+                    "example": 5
+                  },
+                  "grado": {
+                    "type": "string",
+                    "example": "Segundo"
+                  }
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Grupo actualizado"
+            "description": "Grupo actualizado correctamente"
+          },
+          "400": {
+            "description": "Datos inválidos"
+          },
+          "404": {
+            "description": "Grupo no encontrado"
+          },
+          "500": {
+            "description": "Error interno"
           }
         }
       },
       "delete": {
-        "tags": [
-          "Grupos"
-        ],
-        "summary": "Eliminar un grupo",
+        "tags": ["Grupos"],
+        "summary": "Eliminar un grupo por ID",
         "parameters": [
           {
             "name": "id",
@@ -321,22 +372,27 @@
             "required": true,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "ID del grupo a eliminar"
           }
         ],
         "responses": {
           "200": {
-            "description": "Grupo eliminado"
+            "description": "Grupo eliminado correctamente"
+          },
+          "404": {
+            "description": "Grupo no encontrado"
+          },
+          "500": {
+            "description": "Error interno"
           }
         }
       }
     },
     "/grupos/docente/{id_docente}": {
       "get": {
-        "tags": [
-          "Grupos"
-        ],
-        "summary": "Obtener grupos por docente",
+        "tags": ["Grupos"],
+        "summary": "Obtener todos los grupos asignados a un docente",
         "parameters": [
           {
             "name": "id_docente",
@@ -344,22 +400,27 @@
             "required": true,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "ID del docente"
           }
         ],
         "responses": {
           "200": {
-            "description": "Grupos del docente"
+            "description": "Lista de grupos asociados al docente"
+          },
+          "404": {
+            "description": "No se encontraron grupos para el docente"
+          },
+          "500": {
+            "description": "Error al obtener los grupos del docente"
           }
         }
       }
     },
     "/grupos/director/{id_director}": {
       "get": {
-        "tags": [
-          "Grupos"
-        ],
-        "summary": "Obtener grupos por director",
+        "tags": ["Grupos"],
+        "summary": "Obtener todos los grupos supervisados por un director",
         "parameters": [
           {
             "name": "id_director",
@@ -367,55 +428,67 @@
             "required": true,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "ID del director"
           }
         ],
         "responses": {
           "200": {
-            "description": "Grupos del director"
+            "description": "Lista de grupos supervisados por el director"
+          },
+          "404": {
+            "description": "No se encontraron grupos para el director"
+          },
+          "500": {
+            "description": "Error al obtener los grupos del director"
           }
         }
       }
     },
     "/grupos/grado/{grado}": {
       "get": {
-        "tags": [
-          "Grupos"
-        ],
-        "summary": "Obtener grupos por grado",
+        "tags": ["Grupos"],
+        "summary": "Obtener todos los grupos por grado",
         "parameters": [
           {
             "name": "grado",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "example": "3ro"
+            },
+            "description": "Grado académico del grupo (ej. '1ro', '2do', '3ro')"
           }
         ],
         "responses": {
           "200": {
-            "description": "Grupos del grado"
+            "description": "Lista de grupos pertenecientes al grado especificado"
+          },
+          "404": {
+            "description": "No se encontraron grupos para el grado indicado"
+          },
+          "500": {
+            "description": "Error al obtener los grupos por grado"
           }
         }
       }
     },
     "/estudiantes": {
       "get": {
-        "tags": [
-          "Estudiantes"
-        ],
+        "tags": ["Estudiantes"],
         "summary": "Obtener todos los estudiantes",
         "responses": {
           "200": {
-            "description": "Lista de estudiantes"
+            "description": "Lista de estudiantes obtenida correctamente"
+          },
+          "500": {
+            "description": "Error al obtener estudiantes"
           }
         }
       },
       "post": {
-        "tags": [
-          "Estudiantes"
-        ],
+        "tags": ["Estudiantes"],
         "summary": "Registrar un nuevo estudiante",
         "requestBody": {
           "required": true,
@@ -425,22 +498,41 @@
                 "type": "object",
                 "properties": {
                   "nombre": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Luis"
                   },
-                  "apellidos": {
-                    "type": "string"
+                  "ap_paterno": {
+                    "type": "string",
+                    "example": "Lopez"
+                  },
+                  "ap_materno": {
+                    "type": "string",
+                    "example": "Martinez"
+                  },
+                  "fecha_nacimiento": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2010-05-15"
                   },
                   "correo": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "luis@gmail.com"
+                  },
+                  "telefono": {
+                    "type": "string",
+                    "example": "1234567890"
                   },
                   "id_grupo": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 3
                   }
                 },
                 "required": [
                   "nombre",
-                  "apellidos",
+                  "ap_paterno",
+                  "fecha_nacimiento",
                   "correo",
+                  "telefono",
                   "id_grupo"
                 ]
               }
@@ -449,76 +541,90 @@
         },
         "responses": {
           "201": {
-            "description": "Estudiante creado"
+            "description": "Estudiante registrado correctamente"
+          },
+          "400": {
+            "description": "Error en validación de datos"
+          },
+          "500": {
+            "description": "Error al registrar estudiante"
           }
         }
       }
     },
     "/estudiantes/{id}": {
       "get": {
-        "tags": [
-          "Estudiantes"
-        ],
-        "summary": "Obtener un estudiante por ID",
+        "tags": ["Estudiantes"],
+        "summary": "Obtener los detalles de un estudiante por su ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
+            "description": "ID único del estudiante",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "example": 5
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Estudiante encontrado"
+            "description": "Estudiante encontrado correctamente"
           },
           "404": {
-            "description": "No encontrado"
+            "description": "Estudiante no encontrado"
+          },
+          "500": {
+            "description": "Error al obtener el estudiante"
           }
         }
       }
     },
     "/estudiantes/grupo/{id_grupo}": {
       "get": {
-        "tags": [
-          "Estudiantes"
-        ],
-        "summary": "Obtener estudiantes de un grupo",
+        "tags": ["Estudiantes"],
+        "summary": "Obtener todos los estudiantes pertenecientes a un grupo específico",
         "parameters": [
           {
             "name": "id_grupo",
             "in": "path",
             "required": true,
+            "description": "ID del grupo para filtrar los estudiantes",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "example": 3
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Estudiantes encontrados"
+            "description": "Estudiantes encontrados correctamente"
+          },
+          "404": {
+            "description": "No se encontraron estudiantes para el grupo especificado"
+          },
+          "500": {
+            "description": "Error al obtener los estudiantes"
           }
         }
       }
     },
     "/actividades": {
       "get": {
-        "tags": [
-          "Actividades"
-        ],
+        "tags": ["Actividades"],
         "summary": "Obtener todas las actividades",
         "responses": {
           "200": {
-            "description": "Lista de actividades"
+            "description": "Lista de actividades obtenida correctamente"
+          },
+          "500": {
+            "description": "Error al obtener las actividades"
           }
         }
       },
       "post": {
-        "tags": [
-          "Actividades"
-        ],
+        "tags": ["Actividades"],
         "summary": "Crear una nueva actividad",
         "requestBody": {
           "required": true,
@@ -527,24 +633,29 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "nombre": {
-                    "type": "string"
+                  "nombre_actividad": {
+                    "type": "string",
+                    "example": "Taller de Matemáticas"
                   },
                   "descripcion": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Actividad para reforzar sumas"
                   },
-                  "fechas": {
-                    "type": "string"
+                  "fecha": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2025-04-01"
                   },
-                  "grupo": {
-                    "type": "integer"
+                  "id_grupo": {
+                    "type": "integer",
+                    "example": 2
                   }
                 },
                 "required": [
-                  "nombre",
+                  "nombre_actividad",
                   "descripcion",
-                  "fechas",
-                  "grupo"
+                  "fecha",
+                  "id_grupo"
                 ]
               }
             }
@@ -552,73 +663,90 @@
         },
         "responses": {
           "201": {
-            "description": "Actividad creada"
+            "description": "Actividad creada correctamente"
+          },
+          "400": {
+            "description": "Faltan campos obligatorios"
+          },
+          "500": {
+            "description": "Error al crear la actividad"
           }
         }
       }
     },
     "/actividades/{id}": {
       "get": {
-        "tags": [
-          "Actividades"
-        ],
-        "summary": "Obtener detalles de una actividad",
+        "tags": ["Actividades"],
+        "summary": "Obtener detalles de una actividad por su ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
-            }
+              "type": "integer",
+              "example": 1
+            },
+            "description": "ID único de la actividad"
           }
         ],
         "responses": {
           "200": {
             "description": "Actividad encontrada"
+          },
+          "404": {
+            "description": "Actividad no encontrada"
+          },
+          "500": {
+            "description": "Error al obtener la actividad"
           }
         }
       }
     },
     "/actividades/estudiante/{id_estudiante}": {
       "get": {
-        "tags": [
-          "Actividades"
-        ],
-        "summary": "Obtener actividades de un estudiante",
+        "tags": ["Actividades"],
+        "summary": "Obtener actividades asignadas a un estudiante",
         "parameters": [
           {
             "name": "id_estudiante",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
-            }
+              "type": "integer",
+              "example": 5
+            },
+            "description": "ID del estudiante"
           }
         ],
         "responses": {
           "200": {
             "description": "Actividades encontradas"
+          },
+          "404": {
+            "description": "Estudiante o actividades no encontradas"
+          },
+          "500": {
+            "description": "Error al obtener las actividades del estudiante"
           }
         }
       }
     },
     "/juegos": {
       "get": {
-        "tags": [
-          "Juegos"
-        ],
+        "tags": ["Juegos"],
         "summary": "Obtener todos los juegos",
         "responses": {
           "200": {
-            "description": "Lista de juegos"
+            "description": "Lista de juegos obtenida correctamente"
+          },
+          "500": {
+            "description": "Error al obtener los juegos"
           }
         }
       },
       "post": {
-        "tags": [
-          "Juegos"
-        ],
+        "tags": ["Juegos"],
         "summary": "Crear un nuevo juego",
         "requestBody": {
           "required": true,
@@ -627,20 +755,33 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "nombre": {
-                    "type": "string"
+                  "nombre_juego": {
+                    "type": "string",
+                    "example": "Juego de Matemáticas"
                   },
                   "descripcion": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Juego para repasar sumas"
                   },
-                  "categoria": {
-                    "type": "string"
+                  "nivel": {
+                    "type": "string",
+                    "example": "fácil"
+                  },
+                  "id_materia": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "id_estilo": {
+                    "type": "integer",
+                    "example": 2
                   }
                 },
                 "required": [
-                  "nombre",
+                  "nombre_juego",
                   "descripcion",
-                  "categoria"
+                  "nivel",
+                  "id_materia",
+                  "id_estilo"
                 ]
               }
             }
@@ -648,39 +789,49 @@
         },
         "responses": {
           "201": {
-            "description": "Juego creado"
+            "description": "Juego creado correctamente"
+          },
+          "400": {
+            "description": "Faltan campos obligatorios"
+          },
+          "500": {
+            "description": "Error al crear el juego"
           }
         }
       }
     },
     "/juegos/{id}": {
       "get": {
-        "tags": [
-          "Juegos"
-        ],
-        "summary": "Obtener detalles de un juego",
+        "tags": ["Juegos"],
+        "summary": "Obtener detalles de un juego por su ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
-            }
+              "type": "integer",
+              "example": 1
+            },
+            "description": "ID del juego a consultar"
           }
         ],
         "responses": {
           "200": {
             "description": "Juego encontrado"
+          },
+          "404": {
+            "description": "Juego no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
           }
         }
       }
     },
     "/metricas": {
       "post": {
-        "tags": [
-          "Métricas"
-        ],
+        "tags": ["Métricas"],
         "summary": "Registrar métricas de un jugador",
         "requestBody": {
           "required": true,
@@ -690,31 +841,45 @@
                 "type": "object",
                 "properties": {
                   "id_juego": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                   },
                   "id_jugador": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 2
                   },
                   "puntuacion": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 80
                   },
-                  "tiempo": {
-                    "type": "number"
+                  "tiempo_empleado": {
+                    "type": "integer",
+                    "description": "Tiempo en segundos",
+                    "example": 120
+                  },
+                  "fecha_completado": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2025-03-23"
                   },
                   "intentos": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 3
                   },
-                  "progreso": {
-                    "type": "number"
+                  "progreso_porcentaje": {
+                    "type": "number",
+                    "format": "float",
+                    "example": 0.8
                   }
                 },
                 "required": [
                   "id_juego",
                   "id_jugador",
                   "puntuacion",
-                  "tiempo",
+                  "tiempo_empleado",
+                  "fecha_completado",
                   "intentos",
-                  "progreso"
+                  "progreso_porcentaje"
                 ]
               }
             }
@@ -722,40 +887,96 @@
         },
         "responses": {
           "201": {
-            "description": "Métricas registradas"
+            "description": "Métricas registradas correctamente"
+          },
+          "400": {
+            "description": "Error en los datos enviados"
+          },
+          "500": {
+            "description": "Error interno del servidor"
           }
         }
       }
     },
     "/metricas/{id_jugador}": {
       "get": {
-        "tags": [
-          "Métricas"
-        ],
-        "summary": "Obtener métricas por jugador",
+        "tags": ["Métricas"],
+        "summary": "Obtener todas las métricas registradas por un jugador",
         "parameters": [
           {
             "name": "id_jugador",
             "in": "path",
             "required": true,
+            "description": "ID único del jugador",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "example": 2
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Métricas del jugador"
+            "description": "Métricas del jugador obtenidas correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id_metrica": {
+                        "type": "integer",
+                        "example": 5
+                      },
+                      "id_juego": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "id_jugador": {
+                        "type": "integer",
+                        "example": 2
+                      },
+                      "puntuacion": {
+                        "type": "integer",
+                        "example": 80
+                      },
+                      "tiempo_empleado": {
+                        "type": "integer",
+                        "example": 120
+                      },
+                      "fecha_completado": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-03-23"
+                      },
+                      "intentos": {
+                        "type": "integer",
+                        "example": 3
+                      },
+                      "progreso_porcentaje": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 0.8
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No se encontraron métricas para el jugador"
+          },
+          "500": {
+            "description": "Error interno del servidor"
           }
         }
       }
     },
     "/sesiones_juego": {
       "post": {
-        "tags": [
-          "Sesiones de Juego"
-        ],
-        "summary": "Registrar una sesión de juego",
+        "tags": ["Sesiones de Juego"],
+        "summary": "Registrar una nueva sesión de juego",
         "requestBody": {
           "required": true,
           "content": {
@@ -764,30 +985,37 @@
                 "type": "object",
                 "properties": {
                   "id_jugador": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                   },
                   "id_juego": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                   },
                   "fecha": {
                     "type": "string",
-                    "format": "date"
+                    "format": "date",
+                    "example": "2025-03-23"
                   },
-                  "duracion": {
-                    "type": "number"
+                  "duracion_juego": {
+                    "type": "integer",
+                    "description": "Duración total de la sesión en minutos",
+                    "example": 30
                   },
                   "intentos": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 2
                   },
                   "monedas_ganadas": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 50
                   }
                 },
                 "required": [
                   "id_jugador",
                   "id_juego",
                   "fecha",
-                  "duracion",
+                  "duracion_juego",
                   "intentos",
                   "monedas_ganadas"
                 ]
@@ -797,50 +1025,178 @@
         },
         "responses": {
           "201": {
-            "description": "Sesión registrada"
+            "description": "Sesión registrada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id_sesion": {
+                      "type": "integer",
+                      "example": 10
+                    },
+                    "id_jugador": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "id_juego": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "fecha": {
+                      "type": "string",
+                      "format": "date",
+                      "example": "2025-03-23"
+                    },
+                    "duracion_juego": {
+                      "type": "integer",
+                      "example": 30
+                    },
+                    "intentos": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "monedas_ganadas": {
+                      "type": "integer",
+                      "example": 50
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Faltan campos requeridos o formato incorrecto"
+          },
+          "500": {
+            "description": "Error interno del servidor"
           }
         }
       }
     },
     "/sesiones_juego/{id_jugador}": {
       "get": {
-        "tags": [
-          "Sesiones de Juego"
-        ],
-        "summary": "Obtener sesiones de un jugador",
+        "tags": ["Sesiones de Juego"],
+        "summary": "Obtener todas las sesiones de juego de un jugador",
         "parameters": [
           {
             "name": "id_jugador",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
-            }
+              "type": "integer",
+              "example": 2
+            },
+            "description": "ID del jugador para filtrar sus sesiones de juego"
           }
         ],
         "responses": {
           "200": {
-            "description": "Sesiones obtenidas"
+            "description": "Lista de sesiones de juego del jugador",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id_sesion": {
+                        "type": "integer",
+                        "example": 15
+                      },
+                      "id_jugador": {
+                        "type": "integer",
+                        "example": 2
+                      },
+                      "id_juego": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "fecha": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-03-23"
+                      },
+                      "duracion_juego": {
+                        "type": "integer",
+                        "example": 45
+                      },
+                      "intentos": {
+                        "type": "integer",
+                        "example": 3
+                      },
+                      "monedas_ganadas": {
+                        "type": "integer",
+                        "example": 75
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Jugador no encontrado o sin sesiones registradas"
+          },
+          "500": {
+            "description": "Error interno del servidor"
           }
         }
       }
     },
     "/compras": {
       "get": {
-        "tags": [
-          "Compras"
-        ],
+        "tags": ["Compras"],
         "summary": "Obtener todas las compras",
         "responses": {
           "200": {
-            "description": "Lista de compras"
+            "description": "Lista de compras realizadas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id_compra": {
+                        "type": "integer",
+                        "example": 5
+                      },
+                      "id_usuario": {
+                        "type": "integer",
+                        "example": 12
+                      },
+                      "id_item": {
+                        "type": "integer",
+                        "example": 3
+                      },
+                      "cantidad": {
+                        "type": "integer",
+                        "example": 2
+                      },
+                      "costo_total": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 150.5
+                      },
+                      "fecha_compra": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-03-23T10:30:00Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno al obtener las compras"
           }
         }
       },
       "post": {
-        "tags": [
-          "Compras"
-        ],
+        "tags": ["Compras"],
         "summary": "Registrar una nueva compra",
         "requestBody": {
           "required": true,
@@ -850,41 +1206,80 @@
                 "type": "object",
                 "properties": {
                   "id_usuario": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 12
                   },
                   "id_item": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 3
                   },
                   "cantidad": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 2
                   },
                   "costo_total": {
-                    "type": "number"
+                    "type": "number",
+                    "format": "float",
+                    "example": 150.5
                   }
                 },
-                "required": [
-                  "id_usuario",
-                  "id_item",
-                  "cantidad",
-                  "costo_total"
-                ]
+                "required": ["id_usuario", "id_item", "cantidad", "costo_total"]
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Compra registrada"
+            "description": "Compra registrada correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id_compra": {
+                      "type": "integer",
+                      "example": 10
+                    },
+                    "id_usuario": {
+                      "type": "integer",
+                      "example": 12
+                    },
+                    "id_item": {
+                      "type": "integer",
+                      "example": 3
+                    },
+                    "cantidad": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "costo_total": {
+                      "type": "number",
+                      "format": "float",
+                      "example": 150.5
+                    },
+                    "fecha_compra": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2025-03-23T10:30:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Faltan datos requeridos"
+          },
+          "500": {
+            "description": "Error interno al registrar la compra"
           }
         }
       }
     },
     "/compras/{id}": {
       "get": {
-        "tags": [
-          "Compras"
-        ],
-        "summary": "Obtener una compra por ID",
+        "tags": ["Compras"],
+        "summary": "Obtener una compra por su ID",
         "parameters": [
           {
             "name": "id",
@@ -892,32 +1287,106 @@
             "required": true,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "ID de la compra que se desea obtener"
           }
         ],
         "responses": {
           "200": {
-            "description": "Compra encontrada"
+            "description": "Compra encontrada correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id_compra": {
+                      "type": "integer",
+                      "example": 5
+                    },
+                    "id_usuario": {
+                      "type": "integer",
+                      "example": 12
+                    },
+                    "id_item": {
+                      "type": "integer",
+                      "example": 3
+                    },
+                    "cantidad": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "costo_total": {
+                      "type": "number",
+                      "format": "float",
+                      "example": 150.5
+                    },
+                    "fecha_compra": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2025-03-23T10:30:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Compra no encontrada"
+          },
+          "500": {
+            "description": "Error interno al obtener la compra"
           }
         }
       }
     },
     "/items": {
       "get": {
-        "tags": [
-          "Ítems"
-        ],
+        "tags": ["Ítems"],
         "summary": "Obtener todos los ítems",
         "responses": {
           "200": {
-            "description": "Lista de ítems"
+            "description": "Lista de ítems",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id_item": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "id_tipo_decoracion": {
+                        "type": "integer",
+                        "example": 2
+                      },
+                      "nombre_item": {
+                        "type": "string",
+                        "example": "Espada brillante"
+                      },
+                      "descripcion": {
+                        "type": "string",
+                        "example": "Una espada especial"
+                      },
+                      "categoria_items": {
+                        "type": "string",
+                        "example": "arma"
+                      },
+                      "costo_monedas": {
+                        "type": "integer",
+                        "example": 100
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
       "post": {
-        "tags": [
-          "Ítems"
-        ],
+        "tags": ["Ítems"],
         "summary": "Crear un nuevo ítem",
         "requestBody": {
           "required": true,
@@ -926,20 +1395,33 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "nombre": {
-                    "type": "string"
+                  "id_tipo_decoracion": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "nombre_item": {
+                    "type": "string",
+                    "example": "Espada brillante"
                   },
                   "descripcion": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Una espada especial"
                   },
-                  "costo": {
-                    "type": "number"
+                  "categoria_items": {
+                    "type": "string",
+                    "example": "arma"
+                  },
+                  "costo_monedas": {
+                    "type": "integer",
+                    "example": 100
                   }
                 },
                 "required": [
-                  "nombre",
+                  "id_tipo_decoracion",
+                  "nombre_item",
                   "descripcion",
-                  "costo"
+                  "categoria_items",
+                  "costo_monedas"
                 ]
               }
             }
@@ -947,16 +1429,20 @@
         },
         "responses": {
           "201": {
-            "description": "Ítem creado"
+            "description": "Ítem creado correctamente"
+          },
+          "400": {
+            "description": "Datos incompletos o inválidos"
+          },
+          "500": {
+            "description": "Error interno al crear el ítem"
           }
         }
       }
     },
     "/items/{id}": {
       "get": {
-        "tags": [
-          "Ítems"
-        ],
+        "tags": ["Ítems"],
         "summary": "Obtener un ítem por ID",
         "parameters": [
           {
@@ -964,33 +1450,95 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
-            }
+              "type": "integer",
+              "example": 1
+            },
+            "description": "ID del ítem a consultar"
           }
         ],
         "responses": {
           "200": {
-            "description": "Ítem encontrado"
+            "description": "Ítem encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id_item": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "id_tipo_decoracion": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "nombre_item": {
+                      "type": "string",
+                      "example": "Espada brillante"
+                    },
+                    "descripcion": {
+                      "type": "string",
+                      "example": "Una espada especial"
+                    },
+                    "categoria_items": {
+                      "type": "string",
+                      "example": "arma"
+                    },
+                    "costo_monedas": {
+                      "type": "integer",
+                      "example": 100
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ítem no encontrado"
+          },
+          "500": {
+            "description": "Error al obtener el ítem"
           }
         }
       }
     },
     "/estrategias_ensenanza": {
       "get": {
-        "tags": [
-          "Estrategias de Enseñanza"
-        ],
+        "tags": ["Estrategias de Enseñanza"],
         "summary": "Obtener todas las estrategias de enseñanza",
         "responses": {
           "200": {
-            "description": "Lista de estrategias"
+            "description": "Lista de estrategias",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id_estrategia": { "type": "integer", "example": 1 },
+                      "descripcion": {
+                        "type": "string",
+                        "example": "Aprendizaje visual con esquemas"
+                      },
+                      "estilo_asociado": {
+                        "type": "string",
+                        "example": "visual"
+                      },
+                      "id_tema": { "type": "integer", "example": 2 }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al obtener las estrategias"
           }
         }
       },
       "post": {
-        "tags": [
-          "Estrategias de Enseñanza"
-        ],
+        "tags": ["Estrategias de Enseñanza"],
         "summary": "Crear una nueva estrategia de enseñanza",
         "requestBody": {
           "required": true,
@@ -1000,20 +1548,13 @@
                 "type": "object",
                 "properties": {
                   "descripcion": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Aprendizaje visual con esquemas"
                   },
-                  "estilo_asociado": {
-                    "type": "string"
-                  },
-                  "tema": {
-                    "type": "string"
-                  }
+                  "estilo_asociado": { "type": "string", "example": "visual" },
+                  "id_tema": { "type": "integer", "example": 2 }
                 },
-                "required": [
-                  "descripcion",
-                  "estilo_asociado",
-                  "tema"
-                ]
+                "required": ["descripcion", "estilo_asociado", "id_tema"]
               }
             }
           }
@@ -1021,15 +1562,19 @@
         "responses": {
           "201": {
             "description": "Estrategia registrada"
+          },
+          "400": {
+            "description": "Datos incompletos o inválidos"
+          },
+          "500": {
+            "description": "Error al registrar estrategia"
           }
         }
       }
     },
     "/estrategias_ensenanza/{id}": {
       "get": {
-        "tags": [
-          "Estrategias de Enseñanza"
-        ],
+        "tags": ["Estrategias de Enseñanza"],
         "summary": "Obtener una estrategia por ID",
         "parameters": [
           {
@@ -1037,13 +1582,39 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "example": 1
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Estrategia encontrada"
+            "description": "Estrategia encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id_estrategia": { "type": "integer", "example": 1 },
+                    "descripcion": {
+                      "type": "string",
+                      "example": "Aprendizaje visual con esquemas"
+                    },
+                    "estilo_asociado": {
+                      "type": "string",
+                      "example": "visual"
+                    },
+                    "id_tema": { "type": "integer", "example": 2 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Estrategia no encontrada"
+          },
+          "500": {
+            "description": "Error al obtener estrategia"
           }
         }
       }
@@ -1065,35 +1636,15 @@
     }
   ],
   "tags": [
-    {
-      "name": "Usuarios"
-    },
-    {
-      "name": "Grupos"
-    },
-    {
-      "name": "Estudiantes"
-    },
-    {
-      "name": "Actividades"
-    },
-    {
-      "name": "Juegos"
-    },
-    {
-      "name": "Métricas"
-    },
-    {
-      "name": "Sesiones de Juego"
-    },
-    {
-      "name": "Compras"
-    },
-    {
-      "name": "Ítems"
-    },
-    {
-      "name": "Estrategias de Enseñanza"
-    }
+    { "name": "Usuarios" },
+    { "name": "Grupos" },
+    { "name": "Estudiantes" },
+    { "name": "Actividades" },
+    { "name": "Juegos" },
+    { "name": "Métricas" },
+    { "name": "Sesiones de Juego" },
+    { "name": "Compras" },
+    { "name": "Ítems" },
+    { "name": "Estrategias de Enseñanza" }
   ]
 }
