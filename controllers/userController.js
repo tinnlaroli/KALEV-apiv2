@@ -1,5 +1,5 @@
 const UserModel = require("../models/userModel");
-
+const { generarToken } = require("../utils/jwt")
 class UserController {
   // GET /usuarios/:id - Obtener usuario por ID
   static async obtenerPorId(req, res) {
