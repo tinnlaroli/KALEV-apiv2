@@ -13,7 +13,7 @@ router.post('/login', UserController.login);
 router.get('/:id', validarToken, UserController.obtenerPorId);
 
 // Obtener usuarios por rol
-router.get('/rol/:rol', validarToken, UserController.obtenerPorRol);
+router.get('/rol/:id_rol', validarToken, UserController.obtenerPorRol);
 
 // Actualizar usuario
 router.put('/:id', validarToken, UserController.actualizar);
