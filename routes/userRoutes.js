@@ -3,7 +3,6 @@ const router = express.Router();
 const UserController = require('../controllers/userController');
 const  validarToken  = require('../middlewares/authMiddleware');
 
-console.log("verificarToken:", validarToken);
 // Registrar un nuevo usuario
 router.post('/register', UserController.registrar);
 
