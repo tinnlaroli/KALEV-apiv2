@@ -68,16 +68,50 @@ class UserModel {
   }
 
   // Login por correo
-  static async login(correo) {
+  static async login(req, res) {
+    const { correo, contrasenia } = req.body;
+  
+    if (!correo || !contrasenia) {
+      return res.status(400).json({
+        success: false,
+        message: "Correo y contraseña son obligatorios",
+      });
+    }
+  
     try {
-      const query = "SELECT * FROM usuarios WHERE correo = $1";
-      const { rows } = await pool.query(query, [correo]);
-      return rows[0];
+      const usuario = await UserModel.login(correo);
+  
+      if (!usuario || usuario.contrasenia !== contrasenia) {
+        return res.status(401).json({
+          success: false,
+          message: "Credenciales inválidas",
+        });
+      }
+  
+      const payload = {
+        id_usuario: usuario.id_usuario,
+        correo: usuario.correo,
+        rol: usuario.id_rol
+      };
+  
+      const token = generarToken(payload);
+  
+      return res.status(200).json({
+        success: true,
+        message: "Inicio de sesión exitoso",
+        token,
+        usuario
+      });
     } catch (error) {
-      console.error(`Error al buscar usuario por correo ${correo}:`, error);
-      throw error;
+      console.error("Error en login:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Error en el inicio de sesión",
+        error: error.message,
+      });
     }
   }
+  
 
   // Actualizar usuario
   static async actualizar(id, data) {
