@@ -637,6 +637,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                
                 "properties": {
                   "nombre_actividad": {
                     "type": "string",
@@ -646,10 +647,15 @@
                     "type": "string",
                     "example": "Actividad para reforzar sumas"
                   },
-                  "fecha": {
+                  "fecha_inicio": {
                     "type": "string",
                     "format": "date",
                     "example": "2025-04-01"
+                  },
+                  "fecha_fin": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2025-04-05"
                   },
                   "id_grupo": {
                     "type": "integer",
@@ -858,9 +864,9 @@
                     "example": 80
                   },
                   "tiempo_empleado": {
-                    "type": "integer",
-                    "description": "Tiempo en segundos",
-                    "example": 120
+                    "type": "string",
+                    "description": "Tiempo en formato HH:MM:SS",
+                    "example": "00:02:30"
                   },
                   "fecha_completado": {
                     "type": "string",
@@ -1003,9 +1009,9 @@
                     "example": "2025-03-23"
                   },
                   "duracion_juego": {
-                    "type": "integer",
-                    "description": "Duración total de la sesión en minutos",
-                    "example": 30
+                    "type": "string",
+                    "description": "Duración total de la sesión en formato HH:MM:SS",
+                    "example": "00:30:00"
                   },
                   "intentos": {
                     "type": "integer",
@@ -1224,8 +1230,8 @@
                   },
                   "costo_total": {
                     "type": "number",
-                    "format": "float",
-                    "example": 150.5
+                    "format": "integer",
+                    "example": 150
                   }
                 },
                 "required": ["id_usuario", "id_item", "cantidad", "costo_total"]
