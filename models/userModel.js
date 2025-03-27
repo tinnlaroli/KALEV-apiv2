@@ -1,4 +1,4 @@
-const {pool} = require("../config/db");
+const { pool } = require("../config/db");
 
 class UserModel {
   // Obtener usuario por ID
@@ -16,7 +16,8 @@ class UserModel {
   // Obtener usuarios por rol
   static async obtenerPorRol(id_rol) {
     try {
-      const query = "SELECT * FROM usuarios WHERE id_rol = $1";
+      const query =
+        "SELECT * FROM usuarios WHERE id_rol = $1 AND activo = true";
       const { rows } = await pool.query(query, [id_rol]);
       return rows;
     } catch (error) {
@@ -34,7 +35,7 @@ class UserModel {
       correo,
       telefono,
       id_rol,
-      contrasenia
+      contrasenia,
     } = data;
 
     try {
@@ -58,7 +59,7 @@ class UserModel {
         correo,
         telefono,
         id_rol,
-        contrasenia
+        contrasenia,
       ]);
       return rows[0];
     } catch (error) {
@@ -113,7 +114,7 @@ class UserModel {
 
   // Eliminar
   static async eliminarPorId(id) {
-    const query = 'DELETE FROM usuarios WHERE id_usuario = $1';
+    const query = "UPDATE usuarios SET activo = false WHERE id_usuario = $1";
     await pool.query(query, [id]);
   }
 }
