@@ -10,6 +10,6 @@ router.get('/',  validarToken,ComprasController.obtenerTodas);
 router.get('/:id',  validarToken,ComprasController.obtenerPorId);
 
 // Registrar una nueva compra
-router.post('/',  validarToken,ComprasController.crear);
+router.post('/', validarToken, ComprasController.registrarCompra);
 
 module.exports = router;

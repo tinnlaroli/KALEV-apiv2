@@ -1655,6 +1655,181 @@
           }
         }
       }
+    },
+
+    "/tienda": {
+      "get": {
+        "tags": ["Tienda"],
+        "summary": "Obtener todos los ítems disponibles agrupados por categoría",
+        "responses": {
+          "200": {
+            "description": "Ítems obtenidos correctamente"
+          },
+          "500": {
+            "description": "Error al obtener los ítems"
+          }
+        }
+      }
+    },
+    "/comprasItems": {
+      "post": {
+        "tags": ["losnuevos"],
+        "summary": "Registrar una compra de ítem",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id_usuario": { "type": "integer", "example": 1 },
+                  "id_item": { "type": "integer", "example": 2 },
+                  "cantidad": { "type": "integer", "example": 1 },
+                  "costo_total": { "type": "integer", "example": 100 }
+                },
+                "required": ["id_usuario", "id_item", "cantidad", "costo_total"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Compra registrada correctamente"
+          },
+          "400": {
+            "description": "Faltan datos requeridos"
+          },
+          "500": {
+            "description": "Error al registrar la compra"
+          }
+        }
+      }
+    },
+    "/mascotas": {
+      "post": {
+        "tags": ["losnuevos"],
+        "summary": "Crear una nueva mascota para el jugador",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id_jugador": { "type": "integer", "example": 1 },
+                  "nombre_animal": { "type": "string", "example": "Plumitas" },
+                  "tipo_animal": { "type": "string", "example": "quetzal" }
+                },
+                "required": ["id_jugador", "nombre_animal", "tipo_animal"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Mascota creada correctamente"
+          },
+          "400": {
+            "description": "Faltan datos requeridos"
+          },
+          "500": {
+            "description": "Error al crear la mascota"
+          }
+        }
+      }
+    },
+    "/mascotas/{id}/aplicar-decoracion": {
+      "post": {
+        "tags": ["losnuevos"],
+        "summary": "Aplicar una decoración a la mascota",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            },
+            "description": "ID de la mascota"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id_item": { "type": "integer", "example": 3 }
+                },
+                "required": ["id_item"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Decoración aplicada correctamente"
+          },
+          "400": {
+            "description": "Faltan datos requeridos"
+          },
+          "500": {
+            "description": "Error al aplicar la decoración"
+          }
+        }
+      }
+    },
+    "/mascotas/{id}": {
+      "get": {
+        "tags": ["losnuevos"],
+        "summary": "Obtener detalles de una mascota incluyendo sus decoraciones",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mascota obtenida correctamente"
+          },
+          "500": {
+            "description": "Error al obtener la mascota"
+          }
+        }
+      }
+    },
+    "/mascotas/jugador/{id_jugador}": {
+      "get": {
+        "tags": ["losnuevos"],
+        "summary": "Obtener todas las mascotas de un jugador",
+        "parameters": [
+          {
+            "name": "id_jugador",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de mascotas obtenida correctamente"
+          },
+          "500": {
+            "description": "Error al obtener las mascotas"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1682,6 +1857,7 @@
     { "name": "Sesiones de Juego" },
     { "name": "Compras" },
     { "name": "Ítems" },
-    { "name": "Estrategias de Enseñanza" }
+    { "name": "Estrategias de Enseñanza" },
+    { "name": "losnuevos" }
   ]
 }

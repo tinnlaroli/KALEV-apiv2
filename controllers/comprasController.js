@@ -79,6 +79,23 @@ class ComprasController {
       });
     }
   }
+
+  static async registrarCompra(req, res) {
+    try {
+      const { id_usuario, id_item, cantidad, costo_total } = req.body;
+  
+      if (!id_usuario || !id_item || !cantidad || !costo_total) {
+        return res.status(400).json({ message: 'Faltan datos requeridos' });
+      }
+  
+      const compra = await CompraModel.registrarCompra({ id_usuario, id_item, cantidad, costo_total });
+      res.status(201).json(compra);
+    } catch (error) {
+      console.error('Error al registrar compra:', error);
+      res.status(500).json({ message: 'Error interno al registrar la compra' });
+    }
+  }
+  
 }
 
 module.exports = ComprasController;

@@ -68,9 +68,7 @@ class ComprasModel {
       console.error("Error al registrar la compra:", error.message);
       throw error;
     }
-  }
-  
-  
+  } 
 }
 
 module.exports = ComprasModel;

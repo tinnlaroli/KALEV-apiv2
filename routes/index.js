@@ -13,8 +13,8 @@ const comprasRoutes = require('./comprasRoutes');
 const itemsRoutes = require('./itemsRoutes');
 const estrategiasRoutes = require('./estrategiasRoutes');
 const historialController = require('./historialRoutes');
+const ionicMascotaAaronRoutes = require('./ionicMascotaAaronRoutes');
 
-// Registro de rutas bajo prefijos
 router.use('/usuarios', userRoutes);
 router.use('/grupos', grupoRoutes);
 router.use('/estudiantes', estudianteRoutes);
@@ -26,6 +26,7 @@ router.use('/compras', comprasRoutes);
 router.use('/items', itemsRoutes);
 router.use('/estrategias_ensenanza', estrategiasRoutes);
 router.use('/historial', historialController);
+router.use('/', ionicMascotaAaronRoutes);
 
 // Exportar el enrutador principal
 module.exports = router;
