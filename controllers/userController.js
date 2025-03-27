@@ -1,5 +1,5 @@
 const UserModel = require("../models/userModel");
-const { generarToken } = require("../utils/jwt")
+const { generarToken } = require("../utils/jwt");
 class UserController {
   // GET /usuarios/:id - Obtener usuario por ID
   static async obtenerPorId(req, res) {
@@ -59,7 +59,14 @@ class UserController {
       contrasenia,
     } = req.body;
 
-    if (!nombre_usuario || !ap_paterno || !correo || !telefono || !id_rol || !contrasenia) {
+    if (
+      !nombre_usuario ||
+      !ap_paterno ||
+      !correo ||
+      !telefono ||
+      !id_rol ||
+      !contrasenia
+    ) {
       return res.status(400).json({
         success: false,
         message:
@@ -96,37 +103,37 @@ class UserController {
   // POST /usuarios/login - Login con correo
   static async login(req, res) {
     const { correo, contrasenia } = req.body;
-  
+
     if (!correo || !contrasenia) {
       return res.status(400).json({
         success: false,
         message: "Correo y contraseña son obligatorios",
       });
     }
-  
+
     try {
       const usuario = await UserModel.login(correo);
-  
+
       if (!usuario || usuario.contrasenia !== contrasenia) {
         return res.status(401).json({
           success: false,
           message: "Credenciales inválidas",
         });
       }
-  
+
       const payload = {
         id_usuario: usuario.id_usuario,
         correo: usuario.correo,
-        rol: usuario.id_rol
+        rol: usuario.id_rol,
       };
-  
+
       const token = generarToken(payload);
-  
+
       return res.status(200).json({
         success: true,
         message: "Inicio de sesión exitoso",
         token,
-        usuario
+        usuario,
       });
     } catch (error) {
       console.error("Error en login:", error);
@@ -170,6 +177,33 @@ class UserController {
       return res.status(500).json({
         success: false,
         message: "Error al actualizar el usuario",
+        error: error.message,
+      });
+    }
+  }
+
+  static async eliminar(req, res) {
+    const { id } = req.params;
+
+    try {
+      const usuarioExistente = await UserModel.obtenerPorId(id);
+      if (!usuarioExistente) {
+        return res.status(404).json({
+          success: false,
+          message: `No se encontró el usuario con ID ${id}`,
+        });
+      }
+
+      await UserModel.eliminar(id);
+      return res.status(200).json({
+        success: true,
+        message: "Usuario eliminado correctamente",
+      });
+    } catch (error) {
+      console.error(`Error al eliminar usuario con ID ${id}:`, error);
+      return res.status(500).json({
+        success: false,
+        message: "Error al eliminar el usuario",
         error: error.message,
       });
     }

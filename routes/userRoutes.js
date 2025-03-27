@@ -18,4 +18,7 @@ router.get('/rol/:id_rol', validarToken, UserController.obtenerPorRol);
 // Actualizar usuario
 router.put('/:id', validarToken, UserController.actualizar);
 
+// Eliminar usuario
+router.delete('/:id',validarToken, UserController.eliminar)
+
 module.exports = router;

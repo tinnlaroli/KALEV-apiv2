@@ -110,6 +110,12 @@ class UserModel {
       throw error;
     }
   }
+
+  // Eliminar
+  static async eliminarUsuarioPorId(id) {
+    const query = 'DELETE FROM usuarios WHERE id_usuario = $1';
+    await pool.query(query, [id]);
+  }
 }
 
 module.exports = UserModel;
