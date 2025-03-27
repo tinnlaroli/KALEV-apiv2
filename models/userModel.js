@@ -112,7 +112,7 @@ class UserModel {
   }
 
   // Eliminar
-  static async eliminarUsuarioPorId(id) {
+  static async eliminarPorId(id) {
     const query = 'DELETE FROM usuarios WHERE id_usuario = $1';
     await pool.query(query, [id]);
   }

@@ -193,6 +193,32 @@
             "description": "Error interno"
           }
         }
+      },
+      "delete": {
+        "tags": ["Usuarios"],
+        "summary": "Eliminar un usuario por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del usuario a eliminar"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuario eliminado correctamente"
+          },
+          "404": {
+            "description": "Usuario no encontrado"
+          },
+          "500": {
+            "description": "Error interno"
+          }
+        }
       }
     },
     "/usuarios/rol/{id_rol}": {
@@ -637,7 +663,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                
+
                 "properties": {
                   "nombre_actividad": {
                     "type": "string",

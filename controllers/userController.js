@@ -194,7 +194,7 @@ class UserController {
         });
       }
 
-      await UserModel.eliminar(id);
+      await UserModel.eliminarPorId(id);
       return res.status(200).json({
         success: true,
         message: "Usuario eliminado correctamente",
