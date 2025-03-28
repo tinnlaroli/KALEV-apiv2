@@ -1,8 +1,8 @@
-const pool = require('../config/db');
+const pool = require("../config/db");
 
 class CompraMascotaAaronModel {
   static async obtenerTienda() {
-    const query = 'SELECT * FROM item ORDER BY categoria_items, nombre_item';
+    const query = "SELECT * FROM item ORDER BY categoria_items, nombre_item";
     const { rows } = await pool.query(query);
     return rows;
   }
@@ -50,27 +50,33 @@ class CompraMascotaAaronModel {
   }
 
   static async obtenerMascotasPorJugador(id_jugador) {
-    const query = 'SELECT * FROM animal WHERE id_jugador = $1';
+    const query = "SELECT * FROM animal WHERE id_jugador = $1";
     const { rows } = await pool.query(query, [id_jugador]);
     return rows;
   }
 
   static async login(correo, codigoJuego) {
-    const [rows] = await pool.query(`
+    const [rows] = await pool.query(
+      `
       SELECT 
         e.id_estudiante, e.nombre, e.ap_paterno, e.ap_materno, e.correo,
-        g.id_grupo, g.nombre_grupo, g.grado,
-        j.id_juego, j.nombre_juego
+        g.id_grupo, g.nombre_grupo, g.grado
       FROM estudiantes e
       INNER JOIN grupos g ON e.id_grupo = g.id_grupo
-      INNER JOIN clases_juego cj ON g.id_docente = cj.id_docente
-      INNER JOIN juego j ON cj.id_juego = j.id_juego
-      WHERE e.correo = ? AND cj.codigo_juego = ?
-    `, [correo, codigoJuego]);
-    
-    return rows[0] || null;
-  }
+      INNER JOIN grupo_juego gj ON g.id_grupo = gj.id_grupo
+      WHERE e.correo = ? AND gj.codigo_juego = ?
+    `,
+      [correo, codigoJuego]
+    );
 
+    // Si el código es válido, asociamos al estudiante al grupo
+    if (rows[0]) {
+      // Aquí no modificamos las tablas, solo retornamos el estudiante y grupo
+      return rows[0];
+    }
+
+    return null;
+  }
 }
 
 module.exports = CompraMascotaAaronModel;

@@ -93,12 +93,13 @@ const authController = {
         });
       }
 
+      // Validamos el código de juego y buscamos al estudiante
       const estudiante = await Estudiante.login(correo, codigo_juego);
       
       if (!estudiante) {
         return res.status(401).json({ 
           success: false,
-          message: 'Credenciales inválidas' 
+          message: 'Código de juego o correo inválidos' 
         });
       }
 
@@ -127,6 +128,7 @@ const authController = {
     }
   }
 };
+
 
 module.exports = {
   getTienda,
