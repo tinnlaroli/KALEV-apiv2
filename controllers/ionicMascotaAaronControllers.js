@@ -80,11 +80,35 @@ const obtenerMascotasJugador = async (req, res) => {
   }
 };
 
+const loginEstudiante = async (req, res) => {
+  const { correo, codigo_juego } = req.body;
+
+  if (!correo || !codigo_juego) {
+    return res.status(400).json({ error: 'Correo y código de juego son requeridos' });
+  }
+
+  try {
+    const estudiante = await LoginEstudianteModel.verificarLoginEstudiante(correo, codigo_juego);
+
+    if (estudiante.length === 0) {
+      return res.status(401).json({ error: 'Correo o código de juego inválidos' });
+    }
+
+    res.status(200).json({
+      message: 'Login exitoso',
+      estudiante: estudiante[0]
+    });
+  } catch (error) {
+    console.error('Error en loginEstudiante:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
 module.exports = {
   getTienda,
   registrarCompra,
   crearMascota,
   aplicarDecoracion,
   obtenerMascota,
-  obtenerMascotasJugador
+  obtenerMascotasJugador,
+  loginEstudiante
 };

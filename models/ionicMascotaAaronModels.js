@@ -54,6 +54,29 @@ class CompraMascotaAaronModel {
     const { rows } = await pool.query(query, [id_jugador]);
     return rows;
   }
+
+  static async verificarLoginEstudiante(correo, codigoJuego) {
+    const query = `
+      SELECT 
+        e.id_estudiante,
+        e.nombre,
+        e.ap_paterno,
+        e.ap_materno,
+        e.correo,
+        e.id_grupo,
+        gj.codigo_juego,
+        j.id_juego,
+        j.nombre_juego
+      FROM estudiantes e
+      JOIN grupo_juego gj ON e.id_grupo = gj.id_grupo
+      JOIN juego j ON gj.id_juego = j.id_juego
+      WHERE e.correo = $1 AND gj.codigo_juego = $2
+    `;
+    const values = [correo, codigoJuego];
+    const result = await pool.query(query, values);
+    return result.rows;
+  }
+
 }
 
 module.exports = CompraMascotaAaronModel;
