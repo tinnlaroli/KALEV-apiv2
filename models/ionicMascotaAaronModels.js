@@ -55,26 +55,20 @@ class CompraMascotaAaronModel {
     return rows;
   }
 
-  static async verificarLoginEstudiante(correo, codigoJuego) {
-    const query = `
+  static async login(correo, codigoJuego) {
+    const [rows] = await pool.query(`
       SELECT 
-        e.id_estudiante,
-        e.nombre,
-        e.ap_paterno,
-        e.ap_materno,
-        e.correo,
-        e.id_grupo,
-        gj.codigo_juego,
-        j.id_juego,
-        j.nombre_juego
+        e.id_estudiante, e.nombre, e.ap_paterno, e.ap_materno, e.correo,
+        g.id_grupo, g.nombre_grupo, g.grado,
+        j.id_juego, j.nombre_juego
       FROM estudiantes e
-      JOIN grupo_juego gj ON e.id_grupo = gj.id_grupo
-      JOIN juego j ON gj.id_juego = j.id_juego
-      WHERE e.correo = $1 AND gj.codigo_juego = $2
-    `;
-    const values = [correo, codigoJuego];
-    const result = await pool.query(query, values);
-    return result.rows;
+      INNER JOIN grupos g ON e.id_grupo = g.id_grupo
+      INNER JOIN clases_juego cj ON g.id_docente = cj.id_docente
+      INNER JOIN juego j ON cj.id_juego = j.id_juego
+      WHERE e.correo = ? AND cj.codigo_juego = ?
+    `, [correo, codigoJuego]);
+    
+    return rows[0] || null;
   }
 
 }

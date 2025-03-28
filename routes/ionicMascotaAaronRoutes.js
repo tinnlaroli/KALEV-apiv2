@@ -7,7 +7,7 @@ const {
   aplicarDecoracion,
   obtenerMascota,
   obtenerMascotasJugador,
-  loginEstudiante
+  authController
 } = require('../controllers/ionicMascotaAaronControllers');
 
 router.get('/tienda', getTienda);
@@ -16,5 +16,5 @@ router.post('/mascotas', crearMascota);
 router.post('/mascotas/:id/aplicar-decoracion', aplicarDecoracion);
 router.get('/mascotas/:id', obtenerMascota);
 router.get('/mascotas/jugador/:id_jugador', obtenerMascotasJugador);
-router.post('/login-estudiante', loginEstudiante);
+router.post('/login-estudiante', authController.login);
 module.exports = router;

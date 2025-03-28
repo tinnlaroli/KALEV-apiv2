@@ -1,5 +1,5 @@
 const CompraMascotaAaronModel = require('../models/ionicMascotaAaronModels');
-
+const jwt = require('jsonwebtoken');
 const getTienda = async (req, res) => {
   try {
     const items = await CompraMascotaAaronModel.obtenerTienda();
@@ -80,29 +80,54 @@ const obtenerMascotasJugador = async (req, res) => {
   }
 };
 
-const loginEstudiante = async (req, res) => {
-  const { correo, codigo_juego } = req.body;
+const authController = {
+  login: async (req, res) => {
+    try {
+      const { correo, codigo_juego } = req.body;
+      
+      // Validación básica
+      if (!correo || !codigo_juego) {
+        return res.status(400).json({ 
+          success: false,
+          message: 'Correo y código de juego son requeridos' 
+        });
+      }
 
-  if (!correo || !codigo_juego) {
-    return res.status(400).json({ error: 'Correo y código de juego son requeridos' });
-  }
+      const estudiante = await Estudiante.login(correo, codigo_juego);
+      
+      if (!estudiante) {
+        return res.status(401).json({ 
+          success: false,
+          message: 'Credenciales inválidas' 
+        });
+      }
 
-  try {
-    const estudiante = await LoginEstudianteModel.verificarLoginEstudiante(correo, codigo_juego);
+      // Generar token JWT (expira en 8 horas)
+      const token = jwt.sign(
+        { 
+          id: estudiante.id_estudiante, 
+          role: 'estudiante' 
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '8h' }
+      );
 
-    if (estudiante.length === 0) {
-      return res.status(401).json({ error: 'Correo o código de juego inválidos' });
+      res.json({
+        success: true,
+        token,
+        estudiante
+      });
+
+    } catch (error) {
+      console.error('Error en authController:', error);
+      res.status(500).json({ 
+        success: false,
+        message: 'Error en el servidor' 
+      });
     }
-
-    res.status(200).json({
-      message: 'Login exitoso',
-      estudiante: estudiante[0]
-    });
-  } catch (error) {
-    console.error('Error en loginEstudiante:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
+
 module.exports = {
   getTienda,
   registrarCompra,
@@ -110,5 +135,5 @@ module.exports = {
   aplicarDecoracion,
   obtenerMascota,
   obtenerMascotasJugador,
-  loginEstudiante
+  authController
 };
