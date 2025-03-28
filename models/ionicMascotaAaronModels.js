@@ -56,7 +56,8 @@ class CompraMascotaAaronModel {
   }
 
   static async login(correo, codigoJuego) {
-    const [rows] = await pool.query(
+    // Realizar la consulta SQL
+    const result = await pool.query(
       `
       SELECT 
         e.id_estudiante, e.nombre, e.ap_paterno, e.ap_materno, e.correo,
@@ -64,19 +65,19 @@ class CompraMascotaAaronModel {
       FROM estudiantes e
       INNER JOIN grupos g ON e.id_grupo = g.id_grupo
       INNER JOIN grupo_juego gj ON g.id_grupo = gj.id_grupo
-      WHERE e.correo = ? AND gj.codigo_juego = ?
+      WHERE e.correo = $1 AND gj.codigo_juego = $2
     `,
       [correo, codigoJuego]
     );
-
-    // Si el código es válido, asociamos al estudiante al grupo
-    if (rows[0]) {
-      // Aquí no modificamos las tablas, solo retornamos el estudiante y grupo
-      return rows[0];
+  
+    // Si se encuentran resultados, retornamos el primer resultado
+    if (result.rows && result.rows[0]) {
+      return result.rows[0];
     }
-
+  
     return null;
   }
+  
 }
 
 module.exports = CompraMascotaAaronModel;
