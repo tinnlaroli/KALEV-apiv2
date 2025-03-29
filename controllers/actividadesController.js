@@ -119,11 +119,9 @@ class ActividadController {
   static async eliminar(req, res) {
     const { id } = req.params;
     try {
-      const query =
-        "DELETE FROM actividades WHERE id_actividad = $1 RETURNING *";
-      const { rows } = await pool.query(query, [id]);
+      const actividadEliminada = await ActividadModel.eliminar(id);
 
-      if (rows.length === 0) {
+      if (!actividadEliminada) {
         return res.status(404).json({
           success: false,
           message: `No se encontró la actividad con ID ${id}`,
@@ -165,31 +163,17 @@ class ActividadController {
     }
 
     try {
-      const query = `
-      UPDATE actividades
-      SET nombre_actividad = $1, descripcion = $2, fecha_inicio = $3, fecha_fin = $4, id_grupo = $5
-      WHERE id_actividad = $6
-      RETURNING *
-    `;
-      const { rows } = await pool.query(query, [
+      const actividadActualizada = await ActividadModel.actualizar(id, {
         nombre_actividad,
         descripcion,
         fecha_inicio,
         fecha_fin,
         id_grupo,
-        id,
-      ]);
-
-      if (rows.length === 0) {
-        return res.status(404).json({
-          success: false,
-          message: `No se encontró la actividad con ID ${id}`,
-        });
-      }
+      });
 
       return res.status(200).json({
         success: true,
-        data: rows[0],
+        data: actividadActualizada,
         message: "Actividad actualizada correctamente",
       });
     } catch (error) {

@@ -9,7 +9,7 @@ class ActividadModel {
       return rows;
     } catch (error) {
       console.error("Error al obtener actividades:", error);
-      throw error;  // Re-lanzamos el error para ser manejado por el controlador
+      throw error;
     }
   }
 
@@ -18,7 +18,7 @@ class ActividadModel {
     try {
       const query = "SELECT * FROM actividades WHERE id_actividad = $1";
       const { rows } = await pool.query(query, [id]);
-      return rows[0];  // Solo devolvemos el primer registro encontrado
+      return rows[0]; // Solo devolvemos el primer registro encontrado
     } catch (error) {
       console.error(`Error al obtener la actividad con ID ${id}:`, error);
       throw error;
@@ -33,7 +33,7 @@ class ActividadModel {
       const query = `
         INSERT INTO actividades (nombre_actividad, descripcion, fecha_inicio, fecha_fin, id_grupo)
         VALUES ($1, $2, $3, $4, $5)
-        RETURNING *  -- Devuelve la nueva actividad
+        RETURNING *  
       `;
       const { rows } = await pool.query(query, [
         nombre_actividad,
@@ -42,7 +42,7 @@ class ActividadModel {
         fecha_fin,
         id_grupo,
       ]);
-      return rows[0];  // Devolvemos el objeto de la actividad creada
+      return rows[0]; 
     } catch (error) {
       console.error("Error al crear la actividad:", error);
       throw error;
@@ -59,14 +59,50 @@ class ActividadModel {
         WHERE aa.id_estudiante = $1
       `;
       const { rows } = await pool.query(query, [id_estudiante]);
-      return rows;  // Devolvemos todas las actividades relacionadas con el estudiante
+      return rows;
     } catch (error) {
       console.error(`Error al obtener actividades del estudiante ${id_estudiante}:`, error);
       throw error;
     }
   }
 
-  
+  // Eliminar actividad por ID
+  static async eliminar(id) {
+    try {
+      const query = "DELETE FROM actividades WHERE id_actividad = $1 RETURNING *";
+      const { rows } = await pool.query(query, [id]);
+      return rows[0];  // Retorna la actividad eliminada
+    } catch (error) {
+      console.error(`Error al eliminar la actividad con ID ${id}:`, error);
+      throw error;
+    }
+  }
+
+  // Actualizar actividad por ID
+  static async actualizar(id, data) {
+    const { nombre_actividad, descripcion, fecha_inicio, fecha_fin, id_grupo } = data;
+
+    try {
+      const query = `
+        UPDATE actividades
+        SET nombre_actividad = $1, descripcion = $2, fecha_inicio = $3, fecha_fin = $4, id_grupo = $5
+        WHERE id_actividad = $6
+        RETURNING *
+      `;
+      const { rows } = await pool.query(query, [
+        nombre_actividad,
+        descripcion,
+        fecha_inicio,
+        fecha_fin,
+        id_grupo,
+        id,
+      ]);
+      return rows[0];  // Retorna la actividad actualizada
+    } catch (error) {
+      console.error(`Error al actualizar la actividad con ID ${id}:`, error);
+      throw error;
+    }
+  }
 }
 
 module.exports = ActividadModel;
