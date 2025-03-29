@@ -1,4 +1,4 @@
-const {pool} = require("../config/db");
+const { pool } = require("../config/db");
 
 class ActividadModel {
   // Obtener todas las actividades
@@ -9,7 +9,7 @@ class ActividadModel {
       return rows;
     } catch (error) {
       console.error("Error al obtener actividades:", error);
-      throw error;
+      throw error;  // Re-lanzamos el error para ser manejado por el controlador
     }
   }
 
@@ -18,7 +18,7 @@ class ActividadModel {
     try {
       const query = "SELECT * FROM actividades WHERE id_actividad = $1";
       const { rows } = await pool.query(query, [id]);
-      return rows[0];
+      return rows[0];  // Solo devolvemos el primer registro encontrado
     } catch (error) {
       console.error(`Error al obtener la actividad con ID ${id}:`, error);
       throw error;
@@ -33,16 +33,16 @@ class ActividadModel {
       const query = `
         INSERT INTO actividades (nombre_actividad, descripcion, fecha_inicio, fecha_fin, id_grupo)
         VALUES ($1, $2, $3, $4, $5)
-        RETURNING *
+        RETURNING *  -- Devuelve la nueva actividad
       `;
       const { rows } = await pool.query(query, [
         nombre_actividad,
         descripcion,
         fecha_inicio,
         fecha_fin,
-        id_grupo
+        id_grupo,
       ]);
-      return rows[0];
+      return rows[0];  // Devolvemos el objeto de la actividad creada
     } catch (error) {
       console.error("Error al crear la actividad:", error);
       throw error;
@@ -59,7 +59,7 @@ class ActividadModel {
         WHERE aa.id_estudiante = $1
       `;
       const { rows } = await pool.query(query, [id_estudiante]);
-      return rows;
+      return rows;  // Devolvemos todas las actividades relacionadas con el estudiante
     } catch (error) {
       console.error(`Error al obtener actividades del estudiante ${id_estudiante}:`, error);
       throw error;

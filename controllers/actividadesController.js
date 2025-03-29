@@ -50,6 +50,7 @@ class ActividadController {
   static async crear(req, res) {
     const { nombre_actividad, descripcion, fecha_inicio, fecha_fin, id_grupo } = req.body;
 
+    // Validación de campos requeridos
     if (!nombre_actividad || !descripcion || !fecha_inicio || !fecha_fin || !id_grupo) {
       return res.status(400).json({
         success: false,
