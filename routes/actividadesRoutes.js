@@ -19,4 +19,12 @@ router.get(
 // Crear una nueva actividad
 router.post("/", validarToken, ActividadController.crear);
 
+
+// DELETE /actividades/:id - Eliminar una actividad por ID
+router.delete("/:id", validarToken, ActividadController.eliminar);
+
+// PUT /actividades/:id - Actualizar actividad por ID
+router.put("/:id", validarToken, ActividadController.actualizar);
+
+
 module.exports = router;

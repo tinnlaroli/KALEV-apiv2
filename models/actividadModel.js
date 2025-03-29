@@ -65,6 +65,8 @@ class ActividadModel {
       throw error;
     }
   }
+
+  
 }
 
 module.exports = ActividadModel;
