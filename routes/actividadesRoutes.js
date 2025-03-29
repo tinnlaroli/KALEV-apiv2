@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const ActividadController = require("../controllers/actividadController");
+const ActividadController = require("../controllers/actividadesController");
 const validarToken = require("../middlewares/authMiddleware");
 
 // Obtener todas las actividades
