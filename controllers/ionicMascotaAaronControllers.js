@@ -1,5 +1,6 @@
 const CompraMascotaAaronModel = require('../models/ionicMascotaAaronModels');
 const jwt = require('jsonwebtoken');
+
 const getTienda = async (req, res) => {
   try {
     const items = await CompraMascotaAaronModel.obtenerTienda();
@@ -62,6 +63,9 @@ const obtenerMascota = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const mascota = await CompraMascotaAaronModel.obtenerMascota(id);
+    if (!mascota) {
+      return res.status(404).json({ message: 'Mascota no encontrada' });
+    }
     res.status(200).json(mascota);
   } catch (error) {
     console.error(error);
@@ -80,12 +84,24 @@ const obtenerMascotasJugador = async (req, res) => {
   }
 };
 
+const obtenerPersonalizacion = async (req, res) => {
+  try {
+    const id_animal = parseInt(req.params.id);
+    const data = await CompraMascotaAaronModel.obtenerPersonalizacionMascota(id_animal);
+    if (!data) {
+      return res.status(404).json({ message: 'Mascota no encontrada o sin decoraciones aplicadas' });
+    }
+    res.status(200).json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener la personalización de la mascota' });
+  }
+};
+
 const authController = {
   login: async (req, res) => {
     try {
       const { correo, codigo_juego } = req.body;
-      
-      // Validación básica
       if (!correo || !codigo_juego) {
         return res.status(400).json({ 
           success: false,
@@ -93,9 +109,7 @@ const authController = {
         });
       }
 
-      // Validamos el código de juego y buscamos al estudiante
       const estudiante = await CompraMascotaAaronModel.login(correo, codigo_juego);
-      
       if (!estudiante) {
         return res.status(401).json({ 
           success: false,
@@ -103,32 +117,19 @@ const authController = {
         });
       }
 
-      // Generar token JWT (expira en 8 horas)
       const token = jwt.sign(
-        { 
-          id: estudiante.id_estudiante, 
-          role: 'estudiante' 
-        },
+        { id: estudiante.id_estudiante, role: 'estudiante' },
         process.env.JWT_SECRET,
         { expiresIn: '8h' }
       );
 
-      res.json({
-        success: true,
-        token,
-        estudiante
-      });
-
+      res.json({ success: true, token, estudiante });
     } catch (error) {
       console.error('Error en authController:', error);
-      res.status(500).json({ 
-        success: false,
-        message: 'Error en el servidor' 
-      });
+      res.status(500).json({ success: false, message: 'Error en el servidor' });
     }
   }
 };
-
 
 module.exports = {
   getTienda,
@@ -137,5 +138,6 @@ module.exports = {
   aplicarDecoracion,
   obtenerMascota,
   obtenerMascotasJugador,
+  obtenerPersonalizacion,
   authController
 };
