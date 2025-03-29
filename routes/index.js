@@ -14,6 +14,7 @@ const itemsRoutes = require('./itemsRoutes');
 const estrategiasRoutes = require('./estrategiasRoutes');
 const historialController = require('./historialRoutes');
 const ionicMascotaAaronRoutes = require('./ionicMascotaAaronRoutes');
+const jugadorRoutes = require('./jugadorRoutes')
 
 router.use('/usuarios', userRoutes);
 router.use('/grupos', grupoRoutes);
@@ -27,6 +28,7 @@ router.use('/items', itemsRoutes);
 router.use('/estrategias_ensenanza', estrategiasRoutes);
 router.use('/historial', historialController);
 router.use('/', ionicMascotaAaronRoutes);
+router.use('/jugadores', jugadorRoutes);
 
 // Exportar el enrutador principal
 module.exports = router;
