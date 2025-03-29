@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const { pool } = require('../config/db');
 
 class JugadorModel {
   static async crearJugador(id_estudiante, alias) {
